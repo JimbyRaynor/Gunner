@@ -12,13 +12,22 @@ current_script_directory = os.path.dirname(os.path.abspath(__file__))
 os.chdir(current_script_directory)
 
 def ColourTextSquare(x,y,mytext,charwidth,size):
-    LEDlib.LEDtextobj(canvas1,x=x,y=y,text=mytext,colour="light green",pixelsize = size, charwidth=charwidth, solid = False, square=True)
+    return LEDlib.LEDtextobj(canvas1,x=x,y=y,text=mytext,colour="light green",pixelsize = size, charwidth=charwidth, solid = False, square=True)
 
 def ColourText(x,y,mytext,charwidth,size):
-    LEDlib.LEDtextobj(canvas1,x=x,y=y,text=mytext,colour="light green",pixelsize = size, charwidth=charwidth, solid = False, square=False)
+    return LEDlib.LEDtextobj(canvas1,x=x,y=y,text=mytext,colour="light green",pixelsize = size, charwidth=charwidth, solid = False, square=False)
 
 def smalltext(x,y,mytext):
-    ColourText(x,y,mytext,8*2-2,2)
+    return ColourText(x,y,mytext,8*2-2,2)
+
+def medtext(x,y,mytext):
+    return ColourText(x,y,mytext,8*3,3)
+
+scrollboxlines=[]
+def scrollboxset(i,mytext):
+    scrollboxlines[i].update(mytext)
+
+
 
 MAXx = 1914
 MAXy = 900
@@ -38,4 +47,26 @@ instext3 = smalltext(1000,60,"will place a projectile on target.")
 instext4 = smalltext(1000,80,"A hit within 100 metres of the target will destroy it.");
 
 
+for i in range(20):
+    scrollboxlines.append(medtext(10,140+i*26," "))
+
+scrollboxtext = []
+scrollboxstart = 0
+
+def scrollboxadd(mytext):
+    global scrollboxstart
+    if len(scrollboxtext) >= 20: scrollboxstart = scrollboxstart + 1
+    scrollboxtext.append(mytext)
+    i = 0
+    while i <= 20 and i <= len(scrollboxtext)-1:
+       scrollboxset(i,scrollboxtext[scrollboxstart+i])
+       i = i + 1
+
+def mykey(event):
+    key = event.keysym
+    if key in "0123456789":
+        scrollboxadd(key)
+
+
+mainwin.bind("<KeyPress>", mykey)
 mainwin.mainloop()
