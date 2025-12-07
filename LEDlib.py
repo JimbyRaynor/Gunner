@@ -262,6 +262,8 @@ class LEDtextobj:
          self.plusorder = plusorder
          self.square = square
          self.draw()
+    def __del__(self): # the destructor 
+        self.undraw()
     def draw(self):
         global charwidth, psize
         self.undraw()
@@ -275,6 +277,67 @@ class LEDtextobj:
     def update(self,mytext):
         self.text = mytext
         self.draw()
+
+
+class scrollboxobj:
+    def __init__(self, canvas,x=0,y=0,width=1000,height=700):
+        self.x = x
+        self.y = y
+        self.maxlines = 20
+        self.width = width
+        self.height = height
+        self.canvas = canvas
+        self.walls = 0
+        self.scrollboxtext = [] # list of lines of text to display
+        self.scrollboxLEDlines = [] # list of canvas objects that draw each line of text
+        self.scrollboxstart = 0 # draw lines starting at line scrollboxstart (simulates scrolling)
+        for i in range(self.maxlines):
+            self.scrollboxLEDlines.append(self.mediumtext(self.x+5,self.y+5+i*26," "))
+        self.draw()
+    def __del__(self):  # this will call the destructor of all objects inside this class, e.g. scrollboxLEDlines and all its contents
+        self.undraw()
+    def mediumtext(self,x,y,mytext):
+        return LEDtextobj(self.canvas,x=x,y=y,text=mytext,colour="light green",pixelsize = 3, charwidth=8*3 , solid = False, square=False)
+    def scrollboxset(self,i,mytext):
+        self.scrollboxLEDlines[i].update(mytext)
+    def scrollboxadd(self,mytext):
+        if len(self.scrollboxtext) >= self.maxlines: self.scrollboxstart = self.scrollboxstart + 1
+        self.scrollboxtext.append(mytext)
+        i = 0
+        while i <= self.maxlines and i <= len(self.scrollboxtext)-1-self.scrollboxstart:
+          self.scrollboxset(i,self.scrollboxtext[self.scrollboxstart+i])
+          i = i + 1
+    def draw(self):
+        self.walls = self.canvas.create_rectangle(self.x,self.y,self.x+self.width,self.y+self.height,outline="light green")
+    def undraw(self):
+        self.canvas.delete(self.walls)
+
+class scrollboxsmallobj:
+    def __init__(self, canvas,x=0,y=0,width=1000,height=700):
+        self.x = x
+        self.y = y
+        self.maxlines = 30
+        self.width = width
+        self.height = height
+        self.canvas = canvas
+        self.walls = 0
+        self.scrollboxtext = [] # list of lines of text to display
+        self.scrollboxLEDlines = [] # list of canvas objects that draw each line of text
+        self.scrollboxstart = 0 # draw lines starting at line scrollboxstart (simulates scrolling)
+        for i in range(self.maxlines):
+            self.scrollboxLEDlines.append(self.smalltext(self.x+5,self.y+5+i*20," "))
+    def smalltext(self,x,y,mytext):
+        return LEDtextobj(self.canvas,x=x,y=y,text=mytext,colour="light green",pixelsize = 2, charwidth=8*2-2, solid = False, square=False)
+    def scrollboxset(self,i,mytext):
+        self.scrollboxLEDlines[i].update(mytext)
+    def scrollboxadd(self,mytext):
+        if len(self.scrollboxtext) >= self.maxlines: self.scrollboxstart = self.scrollboxstart + 1
+        self.scrollboxtext.append(mytext)
+        i = 0
+        while i <= self.maxlines and i <= len(self.scrollboxtext)-1-self.scrollboxstart:
+          self.scrollboxset(i,self.scrollboxtext[self.scrollboxstart+i])
+          i = i + 1
+
 
 class pygameLEDtextobj:
     def __init__(self, screen,x=0,y=0, text = "", colour = "white", pixelsize = 2, charwidth=23, solid = False):

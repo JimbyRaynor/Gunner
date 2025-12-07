@@ -23,12 +23,6 @@ def smalltext(x,y,mytext):
 def medtext(x,y,mytext):
     return ColourText(x,y,mytext,8*3,3)
 
-scrollboxlines=[]
-def scrollboxset(i,mytext):
-    scrollboxlines[i].update(mytext)
-
-
-
 MAXx = 1914
 MAXy = 900
 
@@ -37,36 +31,38 @@ mainwin.geometry(str(MAXx)+"x"+str(MAXy))
 canvas1 = Canvas(mainwin,width=MAXx,height= MAXy,bg="black")
 canvas1.place(x=0,y=0)
 
+RetroScreen = LEDlib.scrollboxobj(canvas1,x=10,y=140,width=800,height=600)
+instructionbox = LEDlib.scrollboxsmallobj(canvas1,x=1000,y=20,width=800,height=600)
+
 canvas1.create_rectangle(2,2,MAXx-2,MAXy-2,outline="yellow")
 
 titletext = ColourTextSquare(x=20,y=20,mytext="Gunner",charwidth=8*12-10,size=12)
 
-instext1 = smalltext(1000,20,"You are the officer-in-charge giving orders to a gun crew,")
-instext2 = smalltext(1000,40,"telling them the degrees of elevation you estimate")
-instext3 = smalltext(1000,60,"will place a projectile on target.")
-instext4 = smalltext(1000,80,"A hit within 100 metres of the target will destroy it.");
+
+instructionbox.scrollboxadd("Instructions")
+instructionbox.scrollboxadd(" ")
+instructionbox.scrollboxadd("You are the officer-in-charge giving orders to a gun crew,")
+instructionbox.scrollboxadd("telling them the degrees of elevation you estimate")
+instructionbox.scrollboxadd("will place a projectile on target.")
+instructionbox.scrollboxadd("A hit within 100 metres of the target will destroy it.")
+instructionbox.scrollboxadd(" ")
+instructionbox.scrollboxadd(" ")
+instructionbox.scrollboxadd(" ")
 
 
-for i in range(20):
-    scrollboxlines.append(medtext(10,140+i*26," "))
-
-scrollboxtext = []
-scrollboxstart = 0
-
-def scrollboxadd(mytext):
-    global scrollboxstart
-    if len(scrollboxtext) >= 20: scrollboxstart = scrollboxstart + 1
-    scrollboxtext.append(mytext)
-    i = 0
-    while i <= 20 and i <= len(scrollboxtext)-1:
-       scrollboxset(i,scrollboxtext[scrollboxstart+i])
-       i = i + 1
+def on_close():
+     global RetroScreen, instructionbox, titletext
+     del RetroScreen
+     del instructionbox
+     del titletext
+     mainwin.destroy()
 
 def mykey(event):
     key = event.keysym
     if key in "0123456789":
-        scrollboxadd(key)
+        RetroScreen.scrollboxadd(key)
+        
 
-
+mainwin.protocol("WM_DELETE_WINDOW", on_close)
 mainwin.bind("<KeyPress>", mykey)
 mainwin.mainloop()
