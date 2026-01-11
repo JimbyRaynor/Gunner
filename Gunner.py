@@ -42,20 +42,26 @@ def cosd(x):
 def tand(x):
     return math.tan(math.radians(x))
 
+def screenx(x): # converts real x position to a screen position
+    return int(x*scalex)
+
+def screeny(y): # converts real y position to a screen position
+    return int(groundy-y*scaley)
+
 def updateball():
     global ballx0, bally0, vx, vy
-    ballx0 = int(gunx+rgun*cosd(angle))
-    bally0 = int(guny-rgun*sind(angle))
+    ballx0 = gunx+rgun*cosd(angle)
+    bally0 = guny+rgun*sind(angle)
     vx = v*cosd(angle)
     vy = v*sind(angle)
-    ball.resetposition(ballx0, bally0)
+    ball.resetposition(screenx(ballx0), screeny(bally0))
 
 def moveball():
     global ballx, bally, vx, vy
     ballx = ballx + vx*STEPTIME/1000
     bally = bally + vy*STEPTIME/1000
     vy = vy - g*STEPTIME/1000
-    ball.resetposition(ballx0+scalex*ballx, bally0-scaley*bally)
+    ball.resetposition(screenx(ballx), screeny(bally))
 
 
 MAXx = 1914
@@ -90,28 +96,28 @@ RetroScreen.scrollboxadd(" ")
 
 
 STEPTIME = 100 # in ms
-rgun=10 # radius of gun barrel
+rgun=300 # radius of gun barrel
 angle = 45
 scalex = 0.03
 scaley = 0.03
 retroInputx = 1400
 retroInputy = 400
 groundy = 800
-gunx = 20
-guny = groundy-20
+gunx = 400
+guny = 0
 g = 9.81
-ballx0 = int(gunx+rgun*cosd(angle))
-bally0 = int(guny-rgun*sind(angle))
-ballx = 0
-bally = 0
+ballx0 = gunx+rgun*cosd(angle) # initial real position of ball
+bally0 = guny+rgun*sind(angle)
+ballx = ballx0 # ballx, bally is the real math (x,y) position of ball
+bally = bally0
 #  v^2/g = max range = r
 v = math.sqrt(r*g)
 vx = v*cosd(angle)
 vy = v*sind(angle)
 myship = LEDlib.LEDobj(canvas1,10,10,dx = 0,dy = 0,CharPoints=charAA, pixelsize = 2)
 myship2 = LEDlib.LEDobj(canvas1,40,10,dx = 0,dy = 0,CharPoints=charAB, pixelsize = 2)
-gun = LEDlib.LEDobj(canvas1,gunx,guny,dx = 0,dy = 0,CharPoints=charGun, pixelsize = 2)
-ball = LEDlib.LEDobj(canvas1,ballx0,bally0,dx = 0,dy = 0,CharPoints=charBall, pixelsize = 2)
+gun = LEDlib.LEDobj(canvas1,screenx(gunx),screeny(guny),dx = 0,dy = 0,CharPoints=charGun, pixelsize = 2)
+ball = LEDlib.LEDobj(canvas1,screenx(ballx0),screeny(bally0),dx = 0,dy = 0,CharPoints=charBall, pixelsize = 2)
 
 
 z = 0
@@ -142,8 +148,8 @@ s = 0
 z = 0
 def onclickFire():
     global s, z, ballx, bally
-    ballx = 0
-    bally = 0
+    ballx = ballx0
+    bally = bally0
     updateball()
     timer1()
     s = s + 1
