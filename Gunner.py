@@ -1,3 +1,6 @@
+# This can also be a non-violent basketball "shoot the hoop game"
+# Levels for cannon game: multi-target -> Ammo packs, etc, limited shots, shot wall to break, etc
+
 import math
 import sys
 import os
@@ -7,6 +10,12 @@ from tkinter import *
 
 sys.path.insert(0, os.path.expanduser("~/Documents"))
 import LEDlib
+
+charAA = [(0,0, "#B5B3F5"), (1,0, "#B8860B"), (2,0, "#8B4513"), (3,0, "#8B4513"), (4,0, "#8B4513"), (5,0, "#8B4513"), (6,0, "#B8860B"), (7,0, "#B8860B"), (1,1, "#B8860B"), (2,1, "#B8860B"), (3,1, "#8B4513"), (4,1, "#8B4513"), (5,1, "#8B4513"), (6,1, "#B8860B"), (7,1, "#B8860B"), (1,2, "#FFFFE0"), (2,2, "#FFFFE0"), (3,2, "#FFFFE0"), (4,2, "#FFFFE0"), (5,2, "#FFFFE0"), (6,2, "#FFFFE0"), (7,2, "#FFFFE0"), (0,3, "#FFFF00"), (1,3, "#FFFFE0"), (4,3, "#FFFFE0"), (7,3, "#FFFFE0"), (1,4, "#FFFFE0"), (4,4, "#FFFFE0"), (7,4, "#FFFFE0"), (1,5, "#FFFFE0"), (2,5, "#FFFFE0"), (3,5, "#FFFFE0"), (4,5, "#FFFFE0"), (5,5, "#FFFFE0"), (6,5, "#FFFFE0"), (7,5, "#FFFFE0"), (1,6, "#B8860B"), (2,6, "#B5B3F5"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5"), (5,6, "#B5B3F5"), (6,6, "#FFFF00"), (7,6, "#FFFF00"), (0,7, "#8B4513"), (1,7, "#8B4513"), (2,7, "#8B4513"), (3,7, "#B8860B"), (4,7, "#B8860B"), (5,7, "#B8860B"), (6,7, "#8B4513"), (7,7, "#8B4513")]
+charAB = [(2,2, "#FFFF00"), (3,2, "#FFFF00"), (5,2, "#FFFF00"), (0,3, "#FFFF00"), (1,3, "#000000"), (2,3, "#FFFF00"), (3,3, "#000000"), (4,3, "#FFFF00"), (5,3, "#000000"), (6,3, "#FFFF00"), (7,3, "#FFFF00"), (2,4, "#FFFF00"), (3,4, "#FFFF00"), (4,4, "#FFFF00"), (5,4, "#FFFF00"), (6,4, "#FFFF00"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5")]
+charGun = [(5,0, "#279627"), (6,0, "#8B4513"), (4,1, "#279627"), (5,1, "#8B4513"), (3,2, "#8B4513"), (4,2, "#8B4513"), (2,3, "#8B4513"), (3,3, "#279627"), (1,4, "#279627"), (2,4, "#8B4513"), (3,4, "#AAAAAA"), (4,4, "#8B4513"), (5,4, "#AAAAAA"), (6,4, "#8B4513"), (0,5, "#AAAAAA"), (1,5, "#8B4513"), (2,5, "#AAAAAA"), (3,5, "#279627"), (4,5, "#AAAAAA"), (5,5, "#8B4513"), (6,5, "#279627"), (7,5, "#8B4513"), (0,6, "#4C3A23"), (1,6, "#000000"), (2,6, "#000000"), (3,6, "#000000"), (4,6, "#000000"), (5,6, "#000000"), (6,6, "#000000"), (7,6, "#4C3A23"), (1,7, "#4C3A23"), (2,7, "#4C3A23"), (3,7, "#4C3A23"), (4,7, "#4C3A23"), (5,7, "#4C3A23"), (6,7, "#4C3A23")]
+charBall =  [(3,3, "#AAAAAA"), (4,3, "#FFFFFF"), (3,4, "#DDDDDD"), (4,4, "#AAAAAA")]
+
 
 # for loading files (.png, .txt), set current directory = location of this python script (needed for Linux)
 current_script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -24,8 +33,34 @@ def smalltext(x,y,mytext):
 def medtext(x,y,mytext):
     return ColourText(x,y,mytext,8*3,3)
 
+def sind(x):
+    return math.sin(math.radians(x))
+
+def cosd(x):
+    return math.cos(math.radians(x))
+
+def tand(x):
+    return math.tan(math.radians(x))
+
+def updateball():
+    global ballx0, bally0, vx, vy
+    ballx0 = int(gunx+rgun*cosd(angle))
+    bally0 = int(guny-rgun*sind(angle))
+    vx = v*cosd(angle)
+    vy = v*sind(angle)
+    ball.resetposition(ballx0, bally0)
+
+def moveball():
+    global ballx, bally, vx, vy
+    ballx = ballx + vx*STEPTIME/1000
+    bally = bally + vy*STEPTIME/1000
+    vy = vy - g*STEPTIME/1000
+    ball.resetposition(ballx0+scalex*ballx, bally0-scaley*bally)
+
+
 MAXx = 1914
 MAXy = 900
+
 
 mainwin = Tk()
 mainwin.geometry(str(MAXx)+"x"+str(MAXy)) 
@@ -53,6 +88,32 @@ r = random.randrange(20000,60000) # max range of gun
 RetroScreen.scrollboxadd("Maximum range of your gun is "+str(r)+" metres")
 RetroScreen.scrollboxadd(" ")
 
+
+STEPTIME = 100 # in ms
+rgun=10 # radius of gun barrel
+angle = 45
+scalex = 0.03
+scaley = 0.03
+retroInputx = 1400
+retroInputy = 400
+groundy = 800
+gunx = 20
+guny = groundy-20
+g = 9.81
+ballx0 = int(gunx+rgun*cosd(angle))
+bally0 = int(guny-rgun*sind(angle))
+ballx = 0
+bally = 0
+#  v^2/g = max range = r
+v = math.sqrt(r*g)
+vx = v*cosd(angle)
+vy = v*sind(angle)
+myship = LEDlib.LEDobj(canvas1,10,10,dx = 0,dy = 0,CharPoints=charAA, pixelsize = 2)
+myship2 = LEDlib.LEDobj(canvas1,40,10,dx = 0,dy = 0,CharPoints=charAB, pixelsize = 2)
+gun = LEDlib.LEDobj(canvas1,gunx,guny,dx = 0,dy = 0,CharPoints=charGun, pixelsize = 2)
+ball = LEDlib.LEDobj(canvas1,ballx0,bally0,dx = 0,dy = 0,CharPoints=charBall, pixelsize = 2)
+
+
 z = 0
 s1 = 0
 playeralive = True;
@@ -61,26 +122,30 @@ t = int(r*(.1+0.8*random.random())) # distance to target
 RetroScreen.scrollboxadd("Distance to target is "+str(t)+" metres")
 
 
-angle = 45
-retroInputx = 1400
-retroInputy = 400
+
 
 def onclickPlus():
     global angle
     angle = angle + 1
     if angle > 89: angle = 89
     retroangletext.update(angle)
+    updateball()
 
 def onclickMinus():
     global angle
     angle = angle - 1
     if angle < 1: angle = 1
     retroangletext.update(angle)
+    updateball()
 
 s = 0
 z = 0
 def onclickFire():
-    global s, z
+    global s, z, ballx, bally
+    ballx = 0
+    bally = 0
+    updateball()
+    timer1()
     s = s + 1
     b = angle
     b2 = 2 * b / 57.3; # convert b to radians
@@ -128,6 +193,12 @@ def mykey(event):
     key = event.keysym
     if key in "0123456789":
         RetroScreen.scrollboxadd(key)
+
+def timer1():
+    moveball()
+    if bally >= 0:
+       #print(bally)
+       mainwin.after(10,timer1)
 
 mainwin.protocol("WM_DELETE_WINDOW", on_close)
 mainwin.bind("<KeyPress>", mykey)
