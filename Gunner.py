@@ -25,6 +25,12 @@ import random
 from tkinter import * 
 
 sys.path.insert(0, os.path.expanduser("~/Documents"))
+current_script_directory = os.path.dirname(os.path.abspath(__file__))
+os.chdir(current_script_directory)
+
+print("my dir======================= "+current_script_directory)
+
+
 import LEDlib
 
 charAA = [(0,0, "#B5B3F5"), (1,0, "#B8860B"), (2,0, "#8B4513"), (3,0, "#8B4513"), (4,0, "#8B4513"), (5,0, "#8B4513"), (6,0, "#B8860B"), (7,0, "#B8860B"), (1,1, "#B8860B"), (2,1, "#B8860B"), (3,1, "#8B4513"), (4,1, "#8B4513"), (5,1, "#8B4513"), (6,1, "#B8860B"), (7,1, "#B8860B"), (1,2, "#FFFFE0"), (2,2, "#FFFFE0"), (3,2, "#FFFFE0"), (4,2, "#FFFFE0"), (5,2, "#FFFFE0"), (6,2, "#FFFFE0"), (7,2, "#FFFFE0"), (0,3, "#FFFF00"), (1,3, "#FFFFE0"), (4,3, "#FFFFE0"), (7,3, "#FFFFE0"), (1,4, "#FFFFE0"), (4,4, "#FFFFE0"), (7,4, "#FFFFE0"), (1,5, "#FFFFE0"), (2,5, "#FFFFE0"), (3,5, "#FFFFE0"), (4,5, "#FFFFE0"), (5,5, "#FFFFE0"), (6,5, "#FFFFE0"), (7,5, "#FFFFE0"), (1,6, "#B8860B"), (2,6, "#B5B3F5"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5"), (5,6, "#B5B3F5"), (6,6, "#FFFF00"), (7,6, "#FFFF00"), (0,7, "#8B4513"), (1,7, "#8B4513"), (2,7, "#8B4513"), (3,7, "#B8860B"), (4,7, "#B8860B"), (5,7, "#B8860B"), (6,7, "#8B4513"), (7,7, "#8B4513")]
@@ -105,10 +111,28 @@ MAXx = 1914
 MAXy = 900
 
 
+class Spriteobj:
+    def __init__(self, canvas, filename="",x=0,y=0,dx=0,dy=0):
+         self.alive = True
+         self.x = x
+         self.y = y
+         self.dx = dx
+         self.dy = dy
+         self.canvas = canvas
+         self.image = PhotoImage(file=filename)
+         self.sprite  = canvas.create_image(x,y,image=self.image)
+
+
 mainwin = Tk()
 mainwin.geometry(str(MAXx)+"x"+str(MAXy)) 
 canvas1 = Canvas(mainwin,width=MAXx,height= MAXy,bg="black")
 canvas1.place(x=0,y=0)
+
+mysprite = Spriteobj(canvas1,"angle3.png", x=1000,y=600)
+mysprite2 = Spriteobj(canvas1,"angle.png", x=600,y=600)
+boxangle = Spriteobj(canvas1,"angle4.png", x=1400,y=600)
+
+
 
 RetroScreen = LEDlib.scrollboxobj(canvas1,x=10,y=140,width=1000,height=600)
 instructionbox = LEDlib.scrollboxsmallobj(canvas1,x=1100,y=20,width=800,height=600)
