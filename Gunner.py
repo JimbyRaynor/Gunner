@@ -14,6 +14,7 @@
 # explain maths d = Rsin(2\theta) ??? Solve for \theta
 
 # make non-violent shoot through hole like golf, etc
+# side view tennis ???
 
 # make golf game???
 
@@ -27,9 +28,6 @@ from tkinter import *
 sys.path.insert(0, os.path.expanduser("~/Documents"))
 current_script_directory = os.path.dirname(os.path.abspath(__file__))
 os.chdir(current_script_directory)
-
-print("my dir======================= "+current_script_directory)
-
 
 import LEDlib
 
@@ -128,9 +126,9 @@ mainwin.geometry(str(MAXx)+"x"+str(MAXy))
 canvas1 = Canvas(mainwin,width=MAXx,height= MAXy,bg="black")
 canvas1.place(x=0,y=0)
 
-mysprite = Spriteobj(canvas1,"angle3.png", x=1000,y=600)
-mysprite2 = Spriteobj(canvas1,"angle.png", x=600,y=600)
-boxangle = Spriteobj(canvas1,"angle4.png", x=1400,y=600)
+
+playimage = PhotoImage(file="play.png")
+previmage = PhotoImage(file="prev.png")
 
 
 
@@ -241,30 +239,29 @@ def onclickFire():
          RetroScreen.scrollboxadd("Short of target by " + str(abs(e))+ " metres")
 
 
-btnPlus = Button(mainwin,text = "+",command = onclickPlus)
+btnPlus = Button(mainwin,text = "",image=playimage,command = onclickPlus)
 btnPlus.place(x=retroInputx+80,y=retroInputy)
 
-btnMinus = Button(mainwin,text = "-",command = onclickMinus)
-btnMinus.place(x=retroInputx-45,y=retroInputy)
+btnMinus = Button(mainwin,text = "",image = previmage, command = onclickMinus)
+btnMinus.place(x=retroInputx-85,y=retroInputy)
 
 btnFire = Button(mainwin,text = "FIRE!", command = onclickFire)
-btnFire.place(x=retroInputx+0,y=retroInputy+80,)
+btnFire.place(x=retroInputx+0,y=retroInputy+80)
 
-retroangletext = LEDlib.LEDscoreobj(canvas1,retroInputx,retroInputy,angle,"white",4,4*8,2)
-elevationlabel = medtext(retroInputx-180,retroInputy-30,"Elevation (in degrees)")
+boxangle = Spriteobj(canvas1,"angle6.png", x=retroInputx,y=retroInputy)
 
-FireInstructionlabel = medtext(retroInputx-330,retroInputy-100,"Choose Elevation and click on Fire")
+
+
+retroangletext = LEDlib.LEDscoreobj(canvas1,retroInputx,retroInputy,angle,"yellow",4,4*8,2, bg = False)
+
 
 ## draw semicircle for elevation angle
 
 def on_close():
-     global RetroScreen, instructionbox, titletext, retroangletext, elevationlabel, FireInstructionlabel
+     global RetroScreen, instructionbox, titletext, FireInstructionlabel
      del RetroScreen
      del instructionbox
      del titletext
-     del retroangletext
-     del elevationlabel
-     del FireInstructionlabel
      mainwin.destroy()
 
 def mykey(event):
