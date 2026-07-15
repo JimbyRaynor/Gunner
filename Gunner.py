@@ -127,8 +127,7 @@ canvas1 = Canvas(mainwin,width=MAXx,height= MAXy,bg="black")
 canvas1.place(x=0,y=0)
 
 
-playimage = PhotoImage(file="play.png")
-previmage = PhotoImage(file="prev.png")
+
 
 
 
@@ -239,20 +238,33 @@ def onclickFire():
          RetroScreen.scrollboxadd("Short of target by " + str(abs(e))+ " metres")
 
 
+playimage = PhotoImage(file="rightarrow.png")
+previmage = PhotoImage(file="leftarrow.png")
+ffimage = PhotoImage(file="drightarrow.png")
+frimage = PhotoImage(file="dleftarrow.png")
+fireimage = PhotoImage(file="fire.png")
+
 btnPlus = Button(mainwin,text = "",image=playimage,command = onclickPlus)
-btnPlus.place(x=retroInputx+80,y=retroInputy)
+btnPlus.place(x=retroInputx+40,y=retroInputy+100)
+
+btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlus)
+btnPlusPlus.place(x=retroInputx+100,y=retroInputy+100)
+
+btnFire = Button(mainwin,text = "",image=fireimage,command = onclickFire)
+btnFire.place(x=retroInputx-24,y=retroInputy+100)
 
 btnMinus = Button(mainwin,text = "",image = previmage, command = onclickMinus)
-btnMinus.place(x=retroInputx-85,y=retroInputy)
+btnMinus.place(x=retroInputx-85,y=retroInputy+100)
 
-btnFire = Button(mainwin,text = "FIRE!", command = onclickFire)
-btnFire.place(x=retroInputx+0,y=retroInputy+80)
+btnMinusMinus = Button(mainwin,text = "",image = frimage, command = onclickMinus)
+btnMinusMinus.place(x=retroInputx-145,y=retroInputy+100)
+
 
 boxangle = Spriteobj(canvas1,"angle6.png", x=retroInputx,y=retroInputy)
 
 
 
-retroangletext = LEDlib.LEDscoreobj(canvas1,retroInputx,retroInputy,angle,"yellow",4,4*8,2, bg = False)
+retroangletext = LEDlib.LEDscoreobj(canvas1,retroInputx-70,retroInputy-40,angle,"yellow",9,9*8,2, bg = False, square = True)
 
 
 ## draw semicircle for elevation angle
