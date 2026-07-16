@@ -63,6 +63,10 @@ os.chdir(current_script_directory)
 def ColourTextSquare(x,y,mytext,charwidth,size):
     return LEDlib.LEDtextobj(canvas1,x=x,y=y,text=mytext,colour="light green",pixelsize = size, charwidth=charwidth, solid = False, square=True)
 
+def ColourTextSquareRed(x,y,mytext,charwidth,size):
+    return LEDlib.LEDtextobj(canvas1,x=x,y=y,text=mytext,colour="red",pixelsize = size, charwidth=charwidth, solid = False, square=True)
+
+
 def ColourText(x,y,mytext,charwidth,size):
     return LEDlib.LEDtextobj(canvas1,x=x,y=y,text=mytext,colour="light green",pixelsize = size, charwidth=charwidth, solid = False, square=False)
 
@@ -155,7 +159,7 @@ RetroScreen.scrollboxadd(" ")
 
 STEPTIME = 100 # in ms
 rgun=300 # radius of gun barrel
-angle = 45
+angle = 45.0
 scalex = 0.03
 scaley = 0.03
 retroInputx = 1400
@@ -195,6 +199,16 @@ def onclickPlus():
     global angle
     angle = angle + 1
     if angle > 89: angle = 89
+    retroangletext.update(int(angle))
+    resetball()
+    n = len(GunList)
+    i = int((n-1)*angle/90)
+    gun.loadchar(GunList[(n-1)-i])
+
+def onclickMinusMinus():
+    global angle
+    angle = angle - 1
+    if angle < 1: angle = 1
     retroangletext.update(angle)
     resetball()
     n = len(GunList)
@@ -203,7 +217,7 @@ def onclickPlus():
 
 def onclickMinus():
     global angle
-    angle = angle - 1
+    angle = angle - 0.1
     if angle < 1: angle = 1
     retroangletext.update(angle)
     resetball()
@@ -244,28 +258,34 @@ ffimage = PhotoImage(file="drightarrow.png")
 frimage = PhotoImage(file="dleftarrow.png")
 fireimage = PhotoImage(file="fire.png")
 
-btnPlus = Button(mainwin,text = "",image=playimage,command = onclickPlus)
-btnPlus.place(x=retroInputx+40,y=retroInputy+100)
+buttonheight = retroInputy+44
+buttonwidth= 65
+buttonleft = retroInputx-165
 
-btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlus)
-btnPlusPlus.place(x=retroInputx+100,y=retroInputy+100)
-
-btnFire = Button(mainwin,text = "",image=fireimage,command = onclickFire)
-btnFire.place(x=retroInputx-24,y=retroInputy+100)
+btnMinusMinus = Button(mainwin,text = "",image = frimage, command = onclickMinusMinus)
+btnMinusMinus.place(x=buttonleft,y=buttonheight)
 
 btnMinus = Button(mainwin,text = "",image = previmage, command = onclickMinus)
-btnMinus.place(x=retroInputx-85,y=retroInputy+100)
+btnMinus.place(x=buttonleft+buttonwidth*1,y=buttonheight)
 
-btnMinusMinus = Button(mainwin,text = "",image = frimage, command = onclickMinus)
-btnMinusMinus.place(x=retroInputx-145,y=retroInputy+100)
+btnFire = Button(mainwin,text = "",image=fireimage,command = onclickFire)
+btnFire.place(x=buttonleft+buttonwidth*2,y=buttonheight)
+
+btnPlus = Button(mainwin,text = "",image=playimage,command = onclickPlus)
+btnPlus.place(x=buttonleft+buttonwidth*3,y=buttonheight)
+
+btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlus)
+btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 
 
-boxangle = Spriteobj(canvas1,"angle6.png", x=retroInputx,y=retroInputy)
+#boxangle = Spriteobj(canvas1,"angle6.png", x=retroInputx,y=retroInputy)
+
+panel1 = Spriteobj(canvas1,"panel2.png", x=retroInputx,y=retroInputy)
 
 
-
-retroangletext = LEDlib.LEDscoreobj(canvas1,retroInputx-70,retroInputy-40,angle,"yellow",9,9*8,2, bg = False, square = True)
-
+retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+70-190,retroInputy-60,angle,"red",9,9*8,2, bg = False, square = True)
+#angledecimalpoint = ColourTextSquareRed(retroInputx+190-190+20,retroInputy-60,firstdecimalstr,7*8,9)
+#angledecimalvalue = LEDlib.LEDscoreobj(canvas1,retroInputx+240-190,retroInputy-60,4,"red",9,9*8,1, bg = False, square = True)
 
 ## draw semicircle for elevation angle
 
