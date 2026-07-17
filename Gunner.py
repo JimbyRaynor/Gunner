@@ -180,10 +180,6 @@ vy = v*sind(angle)
 myship = LEDlib.LEDobj(canvas1,10,10,dx = 0,dy = 0,CharPoints=charAA, pixelsize = 2)
 myship2 = LEDlib.LEDobj(canvas1,40,10,dx = 0,dy = 0,CharPoints=charAB, pixelsize = 2)
 
-bus1 = LEDlib.LEDobj(canvas1,100,410,dx = 0,dy = 0,CharPoints=charBus1, pixelsize = 1)
-bus2 = LEDlib.LEDobj(canvas1,100,410-32,dx = 0,dy = 0,CharPoints=charBus2, pixelsize = 1)
-
-
 gun = LEDlib.LEDobj(canvas1,screenx(gunx),screeny(guny),dx = 0,dy = 0,CharPoints=GunList[6], pixelsize = 2)
 ball = LEDlib.LEDobj(canvas1,screenx(ballx0),screeny(bally0),dx = 0,dy = 0,CharPoints=charBall, pixelsize = 2)
 ball.undraw()
@@ -197,9 +193,20 @@ RetroScreen.scrollboxadd("Distance to target is "+str(t)+" metres")
 
 def onclickPlus():
     global angle
+    angle = angle + 0.1
+    if angle > 89: angle = 89
+    retroangletext.update(angle)
+    resetball()
+    n = len(GunList)
+    i = int((n-1)*angle/90)
+    gun.loadchar(GunList[(n-1)-i])
+
+
+def onclickPlusPlus():
+    global angle
     angle = angle + 1
     if angle > 89: angle = 89
-    retroangletext.update(int(angle))
+    retroangletext.update(angle)
     resetball()
     n = len(GunList)
     i = int((n-1)*angle/90)
@@ -274,20 +281,96 @@ btnFire.place(x=buttonleft+buttonwidth*2,y=buttonheight)
 btnPlus = Button(mainwin,text = "",image=playimage,command = onclickPlus)
 btnPlus.place(x=buttonleft+buttonwidth*3,y=buttonheight)
 
-btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlus)
+btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlusPlus)
 btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 
-
-#boxangle = Spriteobj(canvas1,"angle6.png", x=retroInputx,y=retroInputy)
 
 panel1 = Spriteobj(canvas1,"panel2.png", x=retroInputx,y=retroInputy)
 
 
 retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+70-190,retroInputy-60,angle,"red",9,9*8,2, bg = False, square = True)
-#angledecimalpoint = ColourTextSquareRed(retroInputx+190-190+20,retroInputy-60,firstdecimalstr,7*8,9)
-#angledecimalvalue = LEDlib.LEDscoreobj(canvas1,retroInputx+240-190,retroInputy-60,4,"red",9,9*8,1, bg = False, square = True)
 
 ## draw semicircle for elevation angle
+
+
+def drawleftbevel(canvas, x=100, y=300,height = 100, width = 10, inner=False):
+   points = [
+       x,y, # top left
+       x+width, y+width, # top right
+       x+width, y+height-width, # bottom right
+       x, y+height # bottom left 
+            ]
+   if inner:
+     canvas.create_polygon(points, fill ="#585858") 
+   else:
+     canvas.create_polygon(points, fill ="#DFDFDF")
+
+def drawrightbevel(canvas, x=100, y=300,height = 100, width = 10, inner=False):
+   points = [
+       x-width,y+width, # top left
+       x, y, # top right
+       x, y+height, # bottom right
+       x-width, y+height-width # bottom left 
+            ]
+   if not inner:
+     canvas.create_polygon(points, fill ="#585858") 
+   else:
+     canvas.create_polygon(points, fill ="#BFBFBF")
+
+def drawtopbevel(canvas, x=100, y=300,width = 100, bevelsize = 10, inner=False):
+   points = [
+       x,y, # top left
+       x+width, y, # top right
+       x+width-bevelsize, y+bevelsize, # bottom right
+       x+bevelsize, y+bevelsize # bottom left 
+            ]
+   if inner:
+     canvas.create_polygon(points, fill ="#505050") 
+   else:
+     canvas.create_polygon(points, fill ="#DFDFDF")  
+
+def drawbottombevel(canvas, x=100, y=300,width = 100, bevelsize = 10, inner=False):
+   points = [
+       x+bevelsize,y, # top left
+       x+width-bevelsize, y, # top right
+       x+width, y+bevelsize, # bottom right
+       x, y+bevelsize # bottom left 
+            ]
+   if not inner:
+     canvas.create_polygon(points, fill ="#666666") 
+   else:
+     canvas.create_polygon(points, fill ="#BBBBBB")
+
+
+
+def drawpanel(canvas,x,y,width,height,bevelsize):
+    points = [
+       x,y, # top left
+       x+width, y, # top right
+       x+width, y+height, # bottom right
+       x, y+height# bottom left 
+            ]
+    canvas.create_polygon(points, fill ="#999999")
+    drawleftbevel(canvas1,x,y,height,bevelsize) 
+    drawrightbevel(canvas1,x+width,y,height,bevelsize) 
+    drawtopbevel(canvas1,x,y,width,bevelsize) 
+    drawbottombevel(canvas1,x,y+height-bevelsize,width,bevelsize)
+
+def drawpanelinner(canvas,x,y,width,height,bevelsize):
+    points = [
+       x,y, # top left
+       x+width, y, # top right
+       x+width, y+height, # bottom right
+       x, y+height# bottom left 
+            ]
+    canvas.create_polygon(points, fill ="#000000")
+    drawleftbevel(canvas1,x,y,height,bevelsize, inner=True) 
+    drawrightbevel(canvas1,x+width,y,height,bevelsize, inner=True) 
+    drawtopbevel(canvas1,x,y,width,bevelsize, inner=True) 
+    drawbottombevel(canvas1,x,y+height-bevelsize,width,bevelsize, inner=True)
+
+drawpanel(canvas1, x=1200,y=600,width=400,height=250,bevelsize=4)
+drawpanelinner(canvas1, x=1260,y=650,width=280,height=110,bevelsize=4)
 
 def on_close():
      global RetroScreen, instructionbox, titletext, FireInstructionlabel
