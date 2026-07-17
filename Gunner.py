@@ -162,8 +162,8 @@ rgun=300 # radius of gun barrel
 angle = 45.0
 scalex = 0.03
 scaley = 0.03
-retroInputx = 1400
-retroInputy = 400
+retroInputx = 1200
+retroInputy = 300
 groundy = 800
 gunx = 400
 guny = 0
@@ -265,9 +265,9 @@ ffimage = PhotoImage(file="drightarrow.png")
 frimage = PhotoImage(file="dleftarrow.png")
 fireimage = PhotoImage(file="fire.png")
 
-buttonheight = retroInputy+44
+buttonheight = retroInputy+80+85
 buttonwidth= 65
-buttonleft = retroInputx-165
+buttonleft = retroInputx+20+16
 
 btnMinusMinus = Button(mainwin,text = "",image = frimage, command = onclickMinusMinus)
 btnMinusMinus.place(x=buttonleft,y=buttonheight)
@@ -285,10 +285,10 @@ btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlusPlus)
 btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 
 
-panel1 = Spriteobj(canvas1,"panel2.png", x=retroInputx,y=retroInputy)
+#panel1 = Spriteobj(canvas1,"panel2.png", x=retroInputx,y=retroInputy)
 
 
-retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+70-190,retroInputy-60,angle,"red",9,9*8,2, bg = False, square = True)
+
 
 ## draw semicircle for elevation angle
 
@@ -369,8 +369,11 @@ def drawpanelinner(canvas,x,y,width,height,bevelsize):
     drawtopbevel(canvas1,x,y,width,bevelsize, inner=True) 
     drawbottombevel(canvas1,x,y+height-bevelsize,width,bevelsize, inner=True)
 
-drawpanel(canvas1, x=1200,y=600,width=400,height=250,bevelsize=4)
-drawpanelinner(canvas1, x=1260,y=650,width=280,height=110,bevelsize=4)
+drawpanel(canvas1, x=retroInputx,y=retroInputy,width=400,height=250,bevelsize=4)
+drawpanelinner(canvas1, x=retroInputx+60,y=retroInputy+40,width=280,height=110,bevelsize=4)
+canvas1.create_text(retroInputx+40, retroInputy+20, text="ANGLE", fill ="black", font = ("ubuntu",12, "bold"))
+
+retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+65,angle,"red",9,9*8,2, bg = False, square = True)
 
 def on_close():
      global RetroScreen, instructionbox, titletext, FireInstructionlabel
