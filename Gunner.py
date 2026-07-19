@@ -162,8 +162,6 @@ rgun=300 # radius of gun barrel
 angle = 45.0
 scalex = 0.03
 scaley = 0.03
-retroInputx = 1200
-retroInputy = 300
 groundy = 800
 gunx = 400
 guny = 0
@@ -265,6 +263,9 @@ ffimage = PhotoImage(file="drightarrow.png")
 frimage = PhotoImage(file="dleftarrow.png")
 fireimage = PhotoImage(file="fire.png")
 
+retroInputx = 1200
+retroInputy = 440
+
 buttonheight = retroInputy+80+85
 buttonwidth= 65
 buttonleft = retroInputx+20+16
@@ -283,11 +284,6 @@ btnPlus.place(x=buttonleft+buttonwidth*3,y=buttonheight)
 
 btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlusPlus)
 btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
-
-
-#panel1 = Spriteobj(canvas1,"panel2.png", x=retroInputx,y=retroInputy)
-
-
 
 
 ## draw semicircle for elevation angle
@@ -371,9 +367,29 @@ def drawpanelinner(canvas,x,y,width,height,bevelsize):
 
 drawpanel(canvas1, x=retroInputx,y=retroInputy,width=400,height=250,bevelsize=4)
 drawpanelinner(canvas1, x=retroInputx+60,y=retroInputy+40,width=280,height=110,bevelsize=4)
-canvas1.create_text(retroInputx+40, retroInputy+20, text="ANGLE", fill ="black", font = ("ubuntu",12, "bold"))
-
+canvas1.create_text(retroInputx+95, retroInputy+20, text="ANGLE (DEGREES)", fill ="black", font = ("ubuntu",12, "bold"))
 retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+65,angle,"red",9,9*8,2, bg = False, square = True)
+
+
+rangepanelx = 1200
+rangepanely = 200
+
+drawpanel(canvas1, x=rangepanelx,y=rangepanely,width=230,height=120,bevelsize=4)
+drawpanelinner(canvas1, x=rangepanelx+20,y=rangepanely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(rangepanelx+105, rangepanely+20, text="MAX RANGE (METRES)", fill ="black", font = ("ubuntu",12, "bold"))
+rangetext=LEDlib.LEDtextobj(canvas1,rangepanelx+35,rangepanely+56,text=str(r),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
+
+targetpanelx = 1200
+targetpanely = 320
+
+drawpanel(canvas1, x=targetpanelx,y=targetpanely,width=230,height=120,bevelsize=4)
+drawpanelinner(canvas1, x=targetpanelx+20,y=targetpanely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(targetpanelx+90, targetpanely+20, text="TARGET (METRES)", fill ="black", font = ("ubuntu",12, "bold"))
+#targettext=LEDlib.LEDtextobj(canvas1,targetpanelx+35,targetpanely+56,text=str(t),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
+targettext=LEDlib.LEDscoreobj(canvas1,targetpanelx+35,targetpanely+56,t,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+
+
+
 
 def on_close():
      global RetroScreen, instructionbox, titletext, FireInstructionlabel
