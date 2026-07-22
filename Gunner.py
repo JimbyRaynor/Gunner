@@ -6,6 +6,10 @@
 # then v = (x1-x0)/(t*cos(angle))
 # where t = sqrt( 2/g*(y0-y1 + (x1-x0)*tan(angle)) )
 
+#  display equation of motion so students can solve it
+#  do for other games as well
+#  no physics step simulations
+
 # need to inc 0.1 of a degree, make a digit object with a knob underneath
 
 # build tools for all games
@@ -30,6 +34,7 @@ current_script_directory = os.path.dirname(os.path.abspath(__file__))
 os.chdir(current_script_directory)
 
 import LEDlib
+import Panellib
 
 charAA = [(0,0, "#B5B3F5"), (1,0, "#B8860B"), (2,0, "#8B4513"), (3,0, "#8B4513"), (4,0, "#8B4513"), (5,0, "#8B4513"), (6,0, "#B8860B"), (7,0, "#B8860B"), (1,1, "#B8860B"), (2,1, "#B8860B"), (3,1, "#8B4513"), (4,1, "#8B4513"), (5,1, "#8B4513"), (6,1, "#B8860B"), (7,1, "#B8860B"), (1,2, "#FFFFE0"), (2,2, "#FFFFE0"), (3,2, "#FFFFE0"), (4,2, "#FFFFE0"), (5,2, "#FFFFE0"), (6,2, "#FFFFE0"), (7,2, "#FFFFE0"), (0,3, "#FFFF00"), (1,3, "#FFFFE0"), (4,3, "#FFFFE0"), (7,3, "#FFFFE0"), (1,4, "#FFFFE0"), (4,4, "#FFFFE0"), (7,4, "#FFFFE0"), (1,5, "#FFFFE0"), (2,5, "#FFFFE0"), (3,5, "#FFFFE0"), (4,5, "#FFFFE0"), (5,5, "#FFFFE0"), (6,5, "#FFFFE0"), (7,5, "#FFFFE0"), (1,6, "#B8860B"), (2,6, "#B5B3F5"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5"), (5,6, "#B5B3F5"), (6,6, "#FFFF00"), (7,6, "#FFFF00"), (0,7, "#8B4513"), (1,7, "#8B4513"), (2,7, "#8B4513"), (3,7, "#B8860B"), (4,7, "#B8860B"), (5,7, "#B8860B"), (6,7, "#8B4513"), (7,7, "#8B4513")]
 charAB = [(2,2, "#FFFF00"), (3,2, "#FFFF00"), (5,2, "#FFFF00"), (0,3, "#FFFF00"), (1,3, "#000000"), (2,3, "#FFFF00"), (3,3, "#000000"), (4,3, "#FFFF00"), (5,3, "#000000"), (6,3, "#FFFF00"), (7,3, "#FFFF00"), (2,4, "#FFFF00"), (3,4, "#FFFF00"), (4,4, "#FFFF00"), (5,4, "#FFFF00"), (6,4, "#FFFF00"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5")]
@@ -285,88 +290,10 @@ btnPlus.place(x=buttonleft+buttonwidth*3,y=buttonheight)
 btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlusPlus)
 btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 
-
 ## draw semicircle for elevation angle
 
-
-def drawleftbevel(canvas, x=100, y=300,height = 100, width = 10, inner=False):
-   points = [
-       x,y, # top left
-       x+width, y+width, # top right
-       x+width, y+height-width, # bottom right
-       x, y+height # bottom left 
-            ]
-   if inner:
-     canvas.create_polygon(points, fill ="#585858") 
-   else:
-     canvas.create_polygon(points, fill ="#DFDFDF")
-
-def drawrightbevel(canvas, x=100, y=300,height = 100, width = 10, inner=False):
-   points = [
-       x-width,y+width, # top left
-       x, y, # top right
-       x, y+height, # bottom right
-       x-width, y+height-width # bottom left 
-            ]
-   if not inner:
-     canvas.create_polygon(points, fill ="#585858") 
-   else:
-     canvas.create_polygon(points, fill ="#BFBFBF")
-
-def drawtopbevel(canvas, x=100, y=300,width = 100, bevelsize = 10, inner=False):
-   points = [
-       x,y, # top left
-       x+width, y, # top right
-       x+width-bevelsize, y+bevelsize, # bottom right
-       x+bevelsize, y+bevelsize # bottom left 
-            ]
-   if inner:
-     canvas.create_polygon(points, fill ="#505050") 
-   else:
-     canvas.create_polygon(points, fill ="#DFDFDF")  
-
-def drawbottombevel(canvas, x=100, y=300,width = 100, bevelsize = 10, inner=False):
-   points = [
-       x+bevelsize,y, # top left
-       x+width-bevelsize, y, # top right
-       x+width, y+bevelsize, # bottom right
-       x, y+bevelsize # bottom left 
-            ]
-   if not inner:
-     canvas.create_polygon(points, fill ="#666666") 
-   else:
-     canvas.create_polygon(points, fill ="#BBBBBB")
-
-
-
-def drawpanel(canvas,x,y,width,height,bevelsize):
-    points = [
-       x,y, # top left
-       x+width, y, # top right
-       x+width, y+height, # bottom right
-       x, y+height# bottom left 
-            ]
-    canvas.create_polygon(points, fill ="#999999")
-    drawleftbevel(canvas1,x,y,height,bevelsize) 
-    drawrightbevel(canvas1,x+width,y,height,bevelsize) 
-    drawtopbevel(canvas1,x,y,width,bevelsize) 
-    drawbottombevel(canvas1,x,y+height-bevelsize,width,bevelsize)
-
-def drawpanelinner(canvas,x,y,width,height,bevelsize):
-    points = [
-       x,y, # top left
-       x+width, y, # top right
-       x+width, y+height, # bottom right
-       x, y+height# bottom left 
-            ]
-    canvas.create_polygon(points, fill ="#000000")
-    drawleftbevel(canvas1,x,y,height,bevelsize, inner=True) 
-    drawrightbevel(canvas1,x+width,y,height,bevelsize, inner=True) 
-    drawtopbevel(canvas1,x,y,width,bevelsize, inner=True) 
-    drawbottombevel(canvas1,x,y+height-bevelsize,width,bevelsize, inner=True)
-
-drawpanel(canvas1, x=retroInputx,y=retroInputy,width=400,height=250,bevelsize=4)
-drawpanelinner(canvas1, x=retroInputx+60,y=retroInputy+40,width=280,height=110,bevelsize=4)
+Panellib.drawpanel(canvas1, x=retroInputx,y=retroInputy,width=400,height=250,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=retroInputx+60,y=retroInputy+40,width=280,height=110,bevelsize=4)
 canvas1.create_text(retroInputx+95, retroInputy+20, text="ANGLE (DEGREES)", fill ="black", font = ("ubuntu",12, "bold"))
 retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+65,angle,"red",9,9*8,2, bg = False, square = True)
 
@@ -374,34 +301,19 @@ retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+65,angl
 rangepanelx = 1200
 rangepanely = 200
 
-drawpanel(canvas1, x=rangepanelx,y=rangepanely,width=230,height=120,bevelsize=4)
-drawpanelinner(canvas1, x=rangepanelx+20,y=rangepanely+40,width=190,height=60,bevelsize=4)
+Panellib.drawpanel(canvas1, x=rangepanelx,y=rangepanely,width=230,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=rangepanelx+20,y=rangepanely+40,width=190,height=60,bevelsize=4)
 canvas1.create_text(rangepanelx+105, rangepanely+20, text="MAX RANGE (METRES)", fill ="black", font = ("ubuntu",12, "bold"))
 rangetext=LEDlib.LEDtextobj(canvas1,rangepanelx+35,rangepanely+56,text=str(r),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
 
 targetpanelx = 1200
 targetpanely = 320
 
-drawpanel(canvas1, x=targetpanelx,y=targetpanely,width=230,height=120,bevelsize=4)
-drawpanelinner(canvas1, x=targetpanelx+20,y=targetpanely+40,width=190,height=60,bevelsize=4)
+Panellib.drawpanel(canvas1, x=targetpanelx,y=targetpanely,width=230,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=targetpanelx+20,y=targetpanely+40,width=190,height=60,bevelsize=4)
 canvas1.create_text(targetpanelx+90, targetpanely+20, text="TARGET (METRES)", fill ="black", font = ("ubuntu",12, "bold"))
-#targettext=LEDlib.LEDtextobj(canvas1,targetpanelx+35,targetpanely+56,text=str(t),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
 targettext=LEDlib.LEDscoreobj(canvas1,targetpanelx+35,targetpanely+56,t,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
-
-
-
-def on_close():
-     global RetroScreen, instructionbox, titletext, FireInstructionlabel
-     del RetroScreen
-     del instructionbox
-     del titletext
-     mainwin.destroy()
-
-def mykey(event):
-    key = event.keysym
-    if key in "0123456789":
-        RetroScreen.scrollboxadd(key)
 
 def timer1():
     global tm
@@ -420,7 +332,5 @@ def timer1():
         print("True distance = ", i0)
         print("ball x0  = ",ballx0)
     
-
-mainwin.protocol("WM_DELETE_WINDOW", on_close)
 mainwin.bind("<KeyPress>", mykey)
 mainwin.mainloop()
