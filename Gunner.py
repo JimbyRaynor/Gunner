@@ -27,7 +27,15 @@ import sys
 import os
 import time
 import random
-from tkinter import * 
+from tkinter import *
+from enum import Enum
+
+class textstate(Enum):
+	GENERAL = 1
+	BUDGET = 2
+	MOVIES = 3
+
+state = textstate.GENERAL
 
 sys.path.insert(0, os.path.expanduser("~/Documents"))
 current_script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -135,11 +143,6 @@ mainwin.geometry(str(MAXx)+"x"+str(MAXy))
 canvas1 = Canvas(mainwin,width=MAXx,height= MAXy,bg="black")
 canvas1.place(x=0,y=0)
 
-
-
-
-
-
 RetroScreen = LEDlib.scrollboxobj(canvas1,x=10,y=140,width=1000,height=600)
 instructionbox = LEDlib.scrollboxsmallobj(canvas1,x=1100,y=20,width=800,height=600)
 
@@ -160,8 +163,6 @@ instructionbox.scrollboxadd(" ")
 r = random.randrange(20000,60000) # max range of gun
 RetroScreen.scrollboxadd("Maximum range of your gun is "+str(r)+" metres")
 RetroScreen.scrollboxadd(" ")
-
-
 STEPTIME = 100 # in ms
 rgun=300 # radius of gun barrel
 angle = 45.0
@@ -194,9 +195,9 @@ playeralive = True;
 t = int(r*(.1+0.8*random.random())) # distance to target
 RetroScreen.scrollboxadd("Distance to target is "+str(t)+" metres")
 
-def onclickPlus():
+def updateangle(mystep):
     global angle
-    angle = angle + 0.1
+    angle = angle + mystep
     if angle > 89: angle = 89
     retroangletext.update(angle)
     resetball()
@@ -204,36 +205,10 @@ def onclickPlus():
     i = int((n-1)*angle/90)
     gun.loadchar(GunList[(n-1)-i])
 
-
-def onclickPlusPlus():
-    global angle
-    angle = angle + 1
-    if angle > 89: angle = 89
-    retroangletext.update(angle)
-    resetball()
-    n = len(GunList)
-    i = int((n-1)*angle/90)
-    gun.loadchar(GunList[(n-1)-i])
-
-def onclickMinusMinus():
-    global angle
-    angle = angle - 1
-    if angle < 1: angle = 1
-    retroangletext.update(angle)
-    resetball()
-    n = len(GunList)
-    i = int((n-1)*angle/90)
-    gun.loadchar(GunList[(n-1)-i])
-
-def onclickMinus():
-    global angle
-    angle = angle - 0.1
-    if angle < 1: angle = 1
-    retroangletext.update(angle)
-    resetball()
-    n = len(GunList)
-    i = int((n-1)*angle/90)
-    gun.loadchar(GunList[(n-1)-i])
+def onclickPlus(): updateangle(0.1)
+def onclickPlusPlus(): updateangle(1)
+def onclickMinusMinus(): updateangle(-1)
+def onclickMinus(): updateangle(-0.1)
 
 s = 0
 z = 0
@@ -332,5 +307,4 @@ def timer1():
         print("True distance = ", i0)
         print("ball x0  = ",ballx0)
     
-mainwin.bind("<KeyPress>", mykey)
 mainwin.mainloop()
