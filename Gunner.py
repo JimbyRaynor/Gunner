@@ -237,6 +237,25 @@ def onclickFire():
          RetroScreen.scrollboxadd("Short of target by " + str(abs(e))+ " metres")
 
 
+def timer1():
+    global tm
+    tm = tm + STEPTIME/1000
+    moveball()
+    if bally >= 0:
+       print("ball tm  = ",tm)
+       print("ball x  = ",vx*tm)
+       print("ball y = ",-0.5*g*tm*tm+v*sind(angle)*tm+bally0)
+       print("screeny = ",screeny(-0.5*g*tm*tm+v*sind(angle)*tm+bally0))
+       mainwin.after(10,timer1)
+    else:
+        b = angle
+        b2 = 2 * b / 57.3; # convert b to radians
+        i0 = r * math.sin(b2)
+        print("True distance = ", i0)
+        print("ball x0  = ",ballx0)
+
+
+#region buttons
 playimage = PhotoImage(file="rightarrow.png")
 previmage = PhotoImage(file="leftarrow.png")
 ffimage = PhotoImage(file="drightarrow.png")
@@ -264,9 +283,11 @@ btnPlus.place(x=buttonleft+buttonwidth*3,y=buttonheight)
 
 btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlusPlus)
 btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
+#endregion
 
 ## draw semicircle for elevation angle
 
+# region Panels
 Panellib.drawpanel(canvas1, x=retroInputx,y=retroInputy,width=400,height=250,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=retroInputx+60,y=retroInputy+40,width=280,height=110,bevelsize=4)
 canvas1.create_text(retroInputx+95, retroInputy+20, text="ANGLE (DEGREES)", fill ="black", font = ("ubuntu",12, "bold"))
@@ -288,23 +309,8 @@ Panellib.drawpanel(canvas1, x=targetpanelx,y=targetpanely,width=230,height=120,b
 Panellib.drawpanelinner(canvas1, x=targetpanelx+20,y=targetpanely+40,width=190,height=60,bevelsize=4)
 canvas1.create_text(targetpanelx+90, targetpanely+20, text="TARGET (METRES)", fill ="black", font = ("ubuntu",12, "bold"))
 targettext=LEDlib.LEDscoreobj(canvas1,targetpanelx+35,targetpanely+56,t,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+#endregion
 
 
-def timer1():
-    global tm
-    tm = tm + STEPTIME/1000
-    moveball()
-    if bally >= 0:
-       print("ball tm  = ",tm)
-       print("ball x  = ",vx*tm)
-       print("ball y = ",-0.5*g*tm*tm+v*sind(angle)*tm+bally0)
-       print("screeny = ",screeny(-0.5*g*tm*tm+v*sind(angle)*tm+bally0))
-       mainwin.after(10,timer1)
-    else:
-        b = angle
-        b2 = 2 * b / 57.3; # convert b to radians
-        i0 = r * math.sin(b2)
-        print("True distance = ", i0)
-        print("ball x0  = ",ballx0)
     
 mainwin.mainloop()
