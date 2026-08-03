@@ -127,6 +127,7 @@ def resetball():
     vy = v*sind(angle) # y component of initial velocity
     ball.resetposition(screenx(ballx0), screeny(bally0))
     ball.undraw()
+    intialvelocitytext.update(int(v))
 
 
 def moveball():
@@ -134,6 +135,11 @@ def moveball():
     ballx  = vx*tm + ballx0
     bally = -0.5*g*tm**2+vy*tm+bally0
     ball.resetposition(screenx(ballx), screeny(bally))
+    xtext.update(int(ballx))
+    if bally >= 0: 
+         ytext.update(int(bally))
+    else:
+         ytext.update(0) 
 
 
 MAXx = 1914
@@ -216,7 +222,7 @@ z = 0
 def onclickFire():
     global s, z, ballx, bally, tm, gamestate
     gamestate = GameStates.PROJECTILEFLYING
-    statustext.update("Projectile Flying. Waiting for impact")
+    statustext.update("Shell Fired. Waiting for impact")
     tm = 0
     ballx = ballx0
     bally = bally0
@@ -308,10 +314,20 @@ btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 ## draw semicircle for elevation angle
 
 # region Panels
+# Angle panel
 Panellib.drawpanel(canvas1, x=retroInputx,y=retroInputy,width=400,height=250,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=retroInputx+60,y=retroInputy+40,width=280,height=110,bevelsize=4)
-canvas1.create_text(retroInputx+135, retroInputy+20, text="ELEVATION ANGLE (DEGREES)", fill ="black", font = ("ubuntu",12, "bold"))
+canvas1.create_text(retroInputx+135, retroInputy+20, text="GUN ELEVATION ANGLE (DEGREES)", fill ="black", font = ("ubuntu",10, "bold"))
 retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+65,angle,"red",9,9*8,2, bg = False, square = True)
+
+
+# Initial Velocity panel (v0 = ?)
+panelx = retroInputx+230
+panely = 200
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(panelx+110, panely+20, text="MUZZLE VELOCITY (M PER S)", fill ="black", font = ("ubuntu",10, "bold"))
+intialvelocitytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,int(math.sqrt(r*g)),colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 
 rangepanelx = 1200
@@ -319,7 +335,7 @@ rangepanely = 200
 
 Panellib.drawpanel(canvas1, x=rangepanelx,y=rangepanely,width=230,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=rangepanelx+20,y=rangepanely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(rangepanelx+105, rangepanely+20, text="MAX RANGE (METRES)", fill ="black", font = ("ubuntu",12, "bold"))
+canvas1.create_text(rangepanelx+105, rangepanely+20, text="MAX RANGE (METRES)", fill ="black", font = ("ubuntu",10, "bold"))
 rangetext=LEDlib.LEDtextobj(canvas1,rangepanelx+35,rangepanely+56,text=str(r),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
 
 targetpanelx = 1200
@@ -327,7 +343,7 @@ targetpanely = 320
 
 Panellib.drawpanel(canvas1, x=targetpanelx,y=targetpanely,width=230,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=targetpanelx+20,y=targetpanely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(targetpanelx+90, targetpanely+20, text="TARGET (METRES)", fill ="black", font = ("ubuntu",12, "bold"))
+canvas1.create_text(targetpanelx+90, targetpanely+20, text="TARGET (METRES)", fill ="black", font = ("ubuntu",10, "bold"))
 targettext=LEDlib.LEDscoreobj(canvas1,targetpanelx+35,targetpanely+56,t,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 # time panel (t = ?)
@@ -335,8 +351,25 @@ panelx = 1200+230
 panely = 320
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(panelx+90, panely+20, text="TIME (SECONDS)", fill ="black", font = ("ubuntu",12, "bold"))
-timetext=LEDlib.LEDscoreobj(canvas1,panelx+35,targetpanely+56,tm,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+canvas1.create_text(panelx+90, panely+20, text="TIME (SECONDS)", fill ="black", font = ("ubuntu",10, "bold"))
+timetext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,tm,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+
+# xloc panel (x = ?)
+panelx = retroInputx
+panely = retroInputy+250
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(panelx+115, panely+20, text="SHELL HORIZONTAL DISTANCE (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
+xtext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+
+# yloc panel (y = ?)
+panelx = retroInputx+230
+panely = retroInputy+250
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(panelx+115, panely+20, text="SHELL VERTICAL DISTANCE (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
+ytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+
 
 
 
@@ -351,7 +384,7 @@ canvas1.create_text(statuspanelx+50, statuspanely+20, text="STATUS", fill ="blac
 statustext=ColourText(statuspanelx+35,statuspanely+56,"Waiting for user",charwidth=8*3-2 ,size=3)
 
 # todo:
-# time panel
+# muzzle velocity
 # x panel
 # y panel
 
