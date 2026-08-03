@@ -47,6 +47,7 @@ os.chdir(current_script_directory)
 #endregion
 
 #region sprites
+# only simple 8,16 bit graphics 
 charAA = [(0,0, "#B5B3F5"), (1,0, "#B8860B"), (2,0, "#8B4513"), (3,0, "#8B4513"), (4,0, "#8B4513"), (5,0, "#8B4513"), (6,0, "#B8860B"), (7,0, "#B8860B"), (1,1, "#B8860B"), (2,1, "#B8860B"), (3,1, "#8B4513"), (4,1, "#8B4513"), (5,1, "#8B4513"), (6,1, "#B8860B"), (7,1, "#B8860B"), (1,2, "#FFFFE0"), (2,2, "#FFFFE0"), (3,2, "#FFFFE0"), (4,2, "#FFFFE0"), (5,2, "#FFFFE0"), (6,2, "#FFFFE0"), (7,2, "#FFFFE0"), (0,3, "#FFFF00"), (1,3, "#FFFFE0"), (4,3, "#FFFFE0"), (7,3, "#FFFFE0"), (1,4, "#FFFFE0"), (4,4, "#FFFFE0"), (7,4, "#FFFFE0"), (1,5, "#FFFFE0"), (2,5, "#FFFFE0"), (3,5, "#FFFFE0"), (4,5, "#FFFFE0"), (5,5, "#FFFFE0"), (6,5, "#FFFFE0"), (7,5, "#FFFFE0"), (1,6, "#B8860B"), (2,6, "#B5B3F5"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5"), (5,6, "#B5B3F5"), (6,6, "#FFFF00"), (7,6, "#FFFF00"), (0,7, "#8B4513"), (1,7, "#8B4513"), (2,7, "#8B4513"), (3,7, "#B8860B"), (4,7, "#B8860B"), (5,7, "#B8860B"), (6,7, "#8B4513"), (7,7, "#8B4513")]
 charAB = [(2,2, "#FFFF00"), (3,2, "#FFFF00"), (5,2, "#FFFF00"), (0,3, "#FFFF00"), (1,3, "#000000"), (2,3, "#FFFF00"), (3,3, "#000000"), (4,3, "#FFFF00"), (5,3, "#000000"), (6,3, "#FFFF00"), (7,3, "#FFFF00"), (2,4, "#FFFF00"), (3,4, "#FFFF00"), (4,4, "#FFFF00"), (5,4, "#FFFF00"), (6,4, "#FFFF00"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5")]
 charGun = [(5,0, "#279627"), (6,0, "#8B4513"), (4,1, "#279627"), (5,1, "#8B4513"), (3,2, "#8B4513"), (4,2, "#8B4513"), (2,3, "#8B4513"), (3,3, "#279627"), (1,4, "#279627"), (2,4, "#8B4513"), (3,4, "#AAAAAA"), (4,4, "#8B4513"), (5,4, "#AAAAAA"), (6,4, "#8B4513"), (0,5, "#AAAAAA"), (1,5, "#8B4513"), (2,5, "#AAAAAA"), (3,5, "#279627"), (4,5, "#AAAAAA"), (5,5, "#8B4513"), (6,5, "#279627"), (7,5, "#8B4513"), (0,6, "#4C3A23"), (1,6, "#000000"), (2,6, "#000000"), (3,6, "#000000"), (4,6, "#000000"), (5,6, "#000000"), (6,6, "#000000"), (7,6, "#4C3A23"), (1,7, "#4C3A23"), (2,7, "#4C3A23"), (3,7, "#4C3A23"), (4,7, "#4C3A23"), (5,7, "#4C3A23"), (6,7, "#4C3A23")]
@@ -248,6 +249,7 @@ def timer1():
        print("ball x  = ",vx*tm)
        print("ball y = ",-0.5*g*tm*tm+v*sind(angle)*tm+bally0)
        print("screeny = ",screeny(-0.5*g*tm*tm+v*sind(angle)*tm+bally0))
+       timetext.update(int(tm))
        mainwin.after(10,timer1)
     else:
         b = angle
@@ -308,7 +310,7 @@ btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 # region Panels
 Panellib.drawpanel(canvas1, x=retroInputx,y=retroInputy,width=400,height=250,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=retroInputx+60,y=retroInputy+40,width=280,height=110,bevelsize=4)
-canvas1.create_text(retroInputx+95, retroInputy+20, text="ANGLE (DEGREES)", fill ="black", font = ("ubuntu",12, "bold"))
+canvas1.create_text(retroInputx+135, retroInputy+20, text="ELEVATION ANGLE (DEGREES)", fill ="black", font = ("ubuntu",12, "bold"))
 retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+65,angle,"red",9,9*8,2, bg = False, square = True)
 
 
@@ -328,6 +330,17 @@ Panellib.drawpanelinner(canvas1, x=targetpanelx+20,y=targetpanely+40,width=190,h
 canvas1.create_text(targetpanelx+90, targetpanely+20, text="TARGET (METRES)", fill ="black", font = ("ubuntu",12, "bold"))
 targettext=LEDlib.LEDscoreobj(canvas1,targetpanelx+35,targetpanely+56,t,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
+# time panel (t = ?)
+panelx = 1200+230
+panely = 320
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(panelx+90, panely+20, text="TIME (SECONDS)", fill ="black", font = ("ubuntu",12, "bold"))
+timetext=LEDlib.LEDscoreobj(canvas1,panelx+35,targetpanely+56,tm,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+
+
+
+
 statuspanelx = 200
 statuspanely = 760
 statuspanelwidth = 1000
@@ -336,6 +349,12 @@ Panellib.drawpanel(canvas1, x=statuspanelx,y=statuspanely,width=statuspanelwidth
 Panellib.drawpanelinner(canvas1, x=statuspanelx+20,y=statuspanely+40,width=statuspanelwidth-40,height=60,bevelsize=4)
 canvas1.create_text(statuspanelx+50, statuspanely+20, text="STATUS", fill ="black", font = ("ubuntu",12, "bold"))
 statustext=ColourText(statuspanelx+35,statuspanely+56,"Waiting for user",charwidth=8*3-2 ,size=3)
+
+# todo:
+# time panel
+# x panel
+# y panel
+
 #endregion
    
 mainwin.mainloop()
