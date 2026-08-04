@@ -3,6 +3,7 @@
 # Levels for cannon game: multi-target -> Ammo packs, etc, limited shots, shot wall to break, etc
 
 #Gunner2:
+# Shoot down U2 spy plane
 # choose angle first
 # then v = (x1-x0)/(t*cos(angle))
 # where t = sqrt( 2/g*(y0-y1 + (x1-x0)*tan(angle)) )
@@ -136,14 +137,22 @@ def moveball():
     bally = -0.5*g*tm**2+vy*tm+bally0
     ball.resetposition(screenx(ballx), screeny(bally))
     xtext.update(int(ballx))
+    vxtext.update(int(vx))
+    vytext.update(int(abs(-g*tm+vy)))
     if bally >= 0: 
          ytext.update(int(bally))
     else:
          ytext.update(0) 
+         b = angle
+         b2 = 2 * b / 57.3; # convert b to radians
+         i0 = r * math.sin(b2)
+         xtext.update(int(abs(i0))) # true distance covered by shell
+         vxtext.update(0)
+         vytext.update(0)
 
 
 MAXx = 1914
-MAXy = 900
+MAXy = 1000
 
 
 class Spriteobj:
@@ -180,6 +189,7 @@ instructionbox.scrollboxadd(" ")
 instructionbox.scrollboxadd(" ")
 instructionbox.scrollboxadd(" ")
 
+
 r = random.randrange(20000,60000) # max range of gun
 RetroScreen.scrollboxadd("Maximum range of your gun is "+str(r)+" metres")
 RetroScreen.scrollboxadd(" ")
@@ -189,7 +199,7 @@ angle = 45.0
 scalex = 0.03
 scaley = 0.03
 groundy = 800
-gunx = 400
+gunx = 0 # keep simple (gun is at (0,0) and has no height)
 guny = 0
 g = 9.81
 tm = 0 # time in seconds
@@ -204,7 +214,7 @@ vy = v*sind(angle)
 myship = LEDlib.LEDobj(canvas1,10,10,dx = 0,dy = 0,CharPoints=charAA, pixelsize = 2)
 myship2 = LEDlib.LEDobj(canvas1,40,10,dx = 0,dy = 0,CharPoints=charAB, pixelsize = 2)
 
-gun = LEDlib.LEDobj(canvas1,screenx(gunx),screeny(guny),dx = 0,dy = 0,CharPoints=GunList[6], pixelsize = 2)
+gun = LEDlib.LEDobj(canvas1,screenx(gunx)+4,screeny(guny),dx = 0,dy = 0,CharPoints=GunList[6], pixelsize = 2)
 ball = LEDlib.LEDobj(canvas1,screenx(ballx0),screeny(bally0),dx = 0,dy = 0,CharPoints=charBall, pixelsize = 2)
 ball.undraw()
 
@@ -359,7 +369,7 @@ panelx = retroInputx
 panely = retroInputy+250
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(panelx+115, panely+20, text="SHELL HORIZONTAL DISTANCE (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
+canvas1.create_text(panelx+115, panely+20, text="SHELL HORIZONTAL DISPLACEMENT (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
 xtext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 # yloc panel (y = ?)
@@ -367,12 +377,25 @@ panelx = retroInputx+230
 panely = retroInputy+250
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(panelx+115, panely+20, text="SHELL VERTICAL DISTANCE (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
+canvas1.create_text(panelx+115, panely+20, text="SHELL HEIGHT (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
 ytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
+# horizontal speed panel (vx = ?)
+panelx = retroInputx
+panely = retroInputy+250+120
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(panelx+115, panely+20, text="SHELL HORIZONTAL SPEED (M PER S)", fill ="black", font = ("ubuntu",8, "bold"))
+vxtext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 
-
+# vertical speed panel (vx = ?)
+panelx = retroInputx+230
+panely = retroInputy+250+120
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(panelx+115, panely+20, text="SHELL VERTICAL SPEED (M PER S)", fill ="black", font = ("ubuntu",8, "bold"))
+vytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 statuspanelx = 200
 statuspanely = 760
@@ -382,12 +405,6 @@ Panellib.drawpanel(canvas1, x=statuspanelx,y=statuspanely,width=statuspanelwidth
 Panellib.drawpanelinner(canvas1, x=statuspanelx+20,y=statuspanely+40,width=statuspanelwidth-40,height=60,bevelsize=4)
 canvas1.create_text(statuspanelx+50, statuspanely+20, text="STATUS", fill ="black", font = ("ubuntu",12, "bold"))
 statustext=ColourText(statuspanelx+35,statuspanely+56,"Waiting for user",charwidth=8*3-2 ,size=3)
-
-# todo:
-# muzzle velocity
-# x panel
-# y panel
-
 #endregion
    
 mainwin.mainloop()
