@@ -1,9 +1,15 @@
 #region todo
+# Shoot down U2 spy plane
+# make to scale then compare speeds of
+# U2
+# F16
+# Lockheed-martin Blackbird
+# try camoflauge over panels
+# buttons to inc/dec time speed
 # This can also be a non-violent basketball "shoot the hoop game"
-# Levels for cannon game: multi-target -> Ammo packs, etc, limited shots, shot wall to break, etc
+# Levels for cannon game: multi-target -> Ammo packs, etc, limited shots, shoot wall to break, etc
 
 #Gunner2:
-# Shoot down U2 spy plane
 # choose angle first
 # then v = (x1-x0)/(t*cos(angle))
 # where t = sqrt( 2/g*(y0-y1 + (x1-x0)*tan(angle)) )
@@ -119,6 +125,10 @@ def screeny(y): # converts real y position to a screen position
 
 #endregion
 
+
+
+
+#region Physics functions
 def resetball():
     global ballx0, bally0, vx, vy, v
     v = math.sqrt(r*g)
@@ -149,12 +159,12 @@ def moveball():
          xtext.update(int(abs(i0))) # true distance covered by shell
          vxtext.update(0)
          vytext.update(0)
-
+#endregion
 
 MAXx = 1914
 MAXy = 1000
 
-
+#region classes
 class Spriteobj:
     def __init__(self, canvas, filename="",x=0,y=0,dx=0,dy=0):
          self.alive = True
@@ -165,39 +175,30 @@ class Spriteobj:
          self.canvas = canvas
          self.image = PhotoImage(file=filename)
          self.sprite  = canvas.create_image(x,y,image=self.image)
-
+#endregion
 
 mainwin = Tk()
 mainwin.geometry(str(MAXx)+"x"+str(MAXy)) 
 canvas1 = Canvas(mainwin,width=MAXx,height= MAXy,bg="black")
 canvas1.place(x=0,y=0)
 
-RetroScreen = LEDlib.scrollboxobj(canvas1,x=10,y=140,width=1000,height=600)
-instructionbox = LEDlib.scrollboxsmallobj(canvas1,x=1100,y=20,width=800,height=600)
 
-canvas1.create_rectangle(2,2,MAXx-2,MAXy-2,outline="yellow")
+#region Global Variables
+r = random.randrange(20000,50000) # max range of gun
 
-titletext = ColourTextSquare(x=20,y=20,mytext="Gunner:",charwidth=8*12-10,size=12)
+s1 = 0
+playeralive = True;
 
-instructionbox.scrollboxadd("Instructions")
-instructionbox.scrollboxadd(" ")
-instructionbox.scrollboxadd("You are the officer-in-charge giving orders to a gun crew,")
-instructionbox.scrollboxadd("telling them the degrees of elevation you estimate")
-instructionbox.scrollboxadd("will place a projectile on target.")
-instructionbox.scrollboxadd("A hit within 100 metres of the target will destroy it.")
-instructionbox.scrollboxadd(" ")
-instructionbox.scrollboxadd(" ")
-instructionbox.scrollboxadd(" ")
+s = 0 # number of shots (rounds of ammunition used)
+z = 0 # number of targets hit
 
+t = int(r*(.1+0.8*random.random())) # distance to target
 
-r = random.randrange(20000,60000) # max range of gun
-RetroScreen.scrollboxadd("Maximum range of your gun is "+str(r)+" metres")
-RetroScreen.scrollboxadd(" ")
 STEPTIME = 100 # in ms
 rgun=300 # radius of gun barrel
 angle = 45.0
-scalex = 0.03
-scaley = 0.03
+scalex = 0.026 # converts real distance to pixel distance
+scaley = 0.026 # x metres is 0.03x pixels
 groundy = 800
 gunx = 0 # keep simple (gun is at (0,0) and has no height)
 guny = 0
@@ -211,6 +212,42 @@ bally = bally0
 v = math.sqrt(r*g)
 vx = v*cosd(angle)
 vy = v*sind(angle)
+#endregion
+
+
+
+
+#region user interface
+RetroScreen = LEDlib.scrollboxobj(canvas1,x=10,y=140,width=1000,height=600)
+instructionbox = LEDlib.scrollboxsmallobj(canvas1,x=1100,y=20,width=800,height=600)
+
+canvas1.create_rectangle(2,2,MAXx-2,MAXy-2,outline="yellow")
+
+RetroScreen.scrollboxadd("Maximum range of your gun is "+str(r)+" metres")
+RetroScreen.scrollboxadd(" ")
+
+titletext = ColourTextSquare(x=20,y=20,mytext="Gunner:",charwidth=8*12-10,size=12)
+xaxisy = 800
+yaxisx = 1000
+for i in range(50):
+    canvas1.create_text(screenx(i*1000), xaxisy, text=str(i), fill ="white", font = ("ubuntu",10, "bold"))
+    canvas1.create_text(screenx(i*1000), xaxisy+20, text="km", fill ="white", font = ("ubuntu",10, "bold"))
+
+for i in range(24):
+    canvas1.create_text(yaxisx,screeny(i*1000), text=str(i)+"km", fill ="white", font = ("ubuntu",10, "bold"))   
+
+instructionbox.scrollboxadd("Instructions")
+instructionbox.scrollboxadd(" ")
+instructionbox.scrollboxadd("You are the officer-in-charge giving orders to a gun crew,")
+instructionbox.scrollboxadd("telling them the degrees of elevation you estimate")
+instructionbox.scrollboxadd("will place a projectile on target.")
+instructionbox.scrollboxadd("A hit within 100 metres of the target will destroy it.")
+instructionbox.scrollboxadd(" ")
+instructionbox.scrollboxadd(" ")
+instructionbox.scrollboxadd(" ")
+#endregion
+
+
 myship = LEDlib.LEDobj(canvas1,10,10,dx = 0,dy = 0,CharPoints=charAA, pixelsize = 2)
 myship2 = LEDlib.LEDobj(canvas1,40,10,dx = 0,dy = 0,CharPoints=charAB, pixelsize = 2)
 
@@ -218,17 +255,35 @@ gun = LEDlib.LEDobj(canvas1,screenx(gunx)+4,screeny(guny),dx = 0,dy = 0,CharPoin
 ball = LEDlib.LEDobj(canvas1,screenx(ballx0),screeny(bally0),dx = 0,dy = 0,CharPoints=charBall, pixelsize = 2)
 ball.undraw()
 
-z = 0
-s1 = 0
-playeralive = True;
 
-t = int(r*(.1+0.8*random.random())) # distance to target
 RetroScreen.scrollboxadd("Distance to target is "+str(t)+" metres")
 
 
 
-s = 0
-z = 0
+#region Timer
+def timer1():
+    global tm
+    tm = tm + STEPTIME/1000
+    moveball()
+    if bally >= 0:
+       print("ball tm  = ",tm)
+       print("ball x  = ",vx*tm)
+       print("ball y = ",-0.5*g*tm*tm+v*sind(angle)*tm+bally0)
+       print("screeny = ",screeny(-0.5*g*tm*tm+v*sind(angle)*tm+bally0))
+       timetext.update(int(tm))
+       mainwin.after(10,timer1)
+    else:
+        b = angle
+        b2 = 2 * b / 57.3; # convert b to radians
+        i0 = r * math.sin(b2)
+        print("True distance = ", i0)
+        print("ball x0  = ",ballx0)
+#endregion
+
+
+
+
+#region buttons
 def onclickFire():
     global s, z, ballx, bally, tm, gamestate
     gamestate = GameStates.PROJECTILEFLYING
@@ -255,27 +310,6 @@ def onclickFire():
     else:   
          RetroScreen.scrollboxadd("Short of target by " + str(abs(e))+ " metres")
 
-
-def timer1():
-    global tm
-    tm = tm + STEPTIME/1000
-    moveball()
-    if bally >= 0:
-       print("ball tm  = ",tm)
-       print("ball x  = ",vx*tm)
-       print("ball y = ",-0.5*g*tm*tm+v*sind(angle)*tm+bally0)
-       print("screeny = ",screeny(-0.5*g*tm*tm+v*sind(angle)*tm+bally0))
-       timetext.update(int(tm))
-       mainwin.after(10,timer1)
-    else:
-        b = angle
-        b2 = 2 * b / 57.3; # convert b to radians
-        i0 = r * math.sin(b2)
-        print("True distance = ", i0)
-        print("ball x0  = ",ballx0)
-
-
-#region buttons
 def updateangle(mystep):
     global angle
     angle = angle + mystep
@@ -322,6 +356,7 @@ btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 #endregion
 
 ## draw semicircle for elevation angle
+
 
 # region Panels
 # Angle panel
@@ -397,8 +432,8 @@ Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bev
 canvas1.create_text(panelx+115, panely+20, text="SHELL VERTICAL SPEED (M PER S)", fill ="black", font = ("ubuntu",8, "bold"))
 vytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
-statuspanelx = 200
-statuspanely = 760
+statuspanelx = 20
+statuspanely = 840
 statuspanelwidth = 1000
 
 Panellib.drawpanel(canvas1, x=statuspanelx,y=statuspanely,width=statuspanelwidth,height=120,bevelsize=4)
