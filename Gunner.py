@@ -1,5 +1,15 @@
 #region todo
 # Put instructions in play field, with pages 1,2,3, etc.
+# Put rivets in panels
+# dark panel?
+# reduce images in gun animation just sensible ones
+# draw line gun next to Angle Text
+# Combine related LEDs into one panel. Look at Bluetti panel. Use colour 
+#       Combine Max Range, Muzzle Velocity
+#       Combine Shell Speeds (title), with arrows for horizontal and vertical
+#       Combine Shell Displacements (title), with arrows for horizontal and height
+#       leave target distance and time separate
+# draw Mount Everest
 # Shoot down U2 spy plane
 # make to scale then compare speeds of
 # U2
@@ -348,7 +358,7 @@ fireimage = PhotoImage(file="fire.png")
 retroInputx = 1420
 retroInputy = 670
 
-buttonheight = retroInputy+80+85
+buttonheight = retroInputy+80+85+12
 buttonwidth= 65
 buttonleft = retroInputx+20+16
 
@@ -373,28 +383,25 @@ btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 
 # region Panels
 # Angle panel
-Panellib.drawpanel(canvas1, x=retroInputx,y=retroInputy,width=400,height=250,bevelsize=4)
-Panellib.drawpanelinner(canvas1, x=retroInputx+60,y=retroInputy+40,width=280,height=110,bevelsize=4)
-canvas1.create_text(retroInputx+135, retroInputy+20, text="GUN ELEVATION ANGLE (DEGREES)", fill ="black", font = ("ubuntu",8, "bold"))
-retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+65,angle,"red",9,9*8,2, bg = False, square = True)
+Panellib.drawpanel(canvas1, x=retroInputx-30,y=retroInputy,width=460,height=250,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=retroInputx-20,y=retroInputy+10,width=440,height=160,bevelsize=4)
+canvas1.create_text(retroInputx+200, retroInputy+130, text="GUN ELEVATION ANGLE (DEGREES)", fill ="white", font = ("ubuntu",8, "bold"))
+retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+50,angle,"red",9,9*8,2, bg = False, square = True)
 
 
 # Initial Velocity panel (v0 = ?)
-panelx = retroInputx+190+10
+panelx = retroInputx-40+10
 panely = retroInputy-300-120*2+60
-Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
-Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(panelx+110, panely+20, text="MUZZLE VELOCITY (M PER S)", fill ="black", font = ("ubuntu",8, "bold"))
-intialvelocitytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,int(math.sqrt(r*g)),colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+10,y=panely+10,width=440,height=100,bevelsize=4)
+canvas1.create_text(panelx+110, panely+100-20, text="MUZZLE VELOCITY (M PER S)", fill ="white", font = ("ubuntu",8, "bold"))
+intialvelocitytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56-20,int(math.sqrt(r*g)),colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
-
-rangepanelx = retroInputx-40+10
+# range
+rangepanelx = retroInputx+200
 rangepanely = retroInputy-300-120*2+60
-
-Panellib.drawpanel(canvas1, x=rangepanelx,y=rangepanely,width=230,height=120,bevelsize=4)
-Panellib.drawpanelinner(canvas1, x=rangepanelx+20,y=rangepanely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(rangepanelx+105, rangepanely+20, text="MAX RANGE (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
-rangetext=LEDlib.LEDtextobj(canvas1,rangepanelx+35,rangepanely+56,text=str(r),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
+canvas1.create_text(rangepanelx+115, rangepanely+100-20, text="MAX RANGE (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
+rangetext=LEDlib.LEDtextobj(canvas1,rangepanelx+35,rangepanely+56-20,text=str(r),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
 
 targetpanelx = retroInputx-40+10
 targetpanely = retroInputy-300-120+60
