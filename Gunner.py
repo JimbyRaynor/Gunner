@@ -1,4 +1,7 @@
 #region todo
+# level 0 tutorial
+# big target: hit anywhere between 0 and 10 km. Then 10km to 20 km, etc. Gives familiarity with evelation angles
+# level 10: hit moving targets.
 # Put instructions in play field, with pages 1,2,3, etc.
 # Put rivets in panels
 # dark panel?
@@ -134,6 +137,21 @@ def screenx(x): # converts real x position to a screen position
 
 def screeny(y): # converts real y position to a screen position
     return int(groundy-y*scaley)
+
+import math
+
+def rotate(points, angle_deg, pivot):
+    angle = math.radians(angle_deg)
+    px, py = pivot
+    out = []
+
+    for x, y in points:
+        tx, ty = x - px, y - py
+        rx = tx * math.cos(angle) - ty * math.sin(angle)
+        ry = tx * math.sin(angle) + ty * math.cos(angle)
+        out.append((rx + px, ry + py))
+
+    return out
 
 #endregion
 
@@ -342,6 +360,9 @@ def updateangle(mystep):
     n = len(GunList)
     i = int((n-1)*angle/90)
     gun.loadchar(GunList[(n-1)-i])
+    flatpoints = rotatelinegun(angle)
+    canvas1.coords(gunlines,*flatpoints)
+    canvas1.itemconfig(gunarc,extent = angle)
 
 def onclickPlus(): updateangle(0.1)
 def onclickPlusPlus(): updateangle(1)
@@ -378,15 +399,16 @@ btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlusPlus)
 btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 #endregion
 
-## draw semicircle for elevation angle
+
+
 
 
 # region Panels
 # Angle panel
 Panellib.drawpanel(canvas1, x=retroInputx-30,y=retroInputy,width=460,height=250,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=retroInputx-20,y=retroInputy+10,width=440,height=160,bevelsize=4)
-canvas1.create_text(retroInputx+200, retroInputy+130, text="GUN ELEVATION ANGLE (DEGREES)", fill ="white", font = ("ubuntu",8, "bold"))
-retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+80,retroInputy+50,angle,"red",9,9*8,2, bg = False, square = True)
+canvas1.create_text(retroInputx+134, retroInputy+130, text="GUN ELEVATION ANGLE (DEGREES)", fill ="white", font = ("ubuntu",8, "bold"))
+retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+20,retroInputy+50,angle,"red",9,9*8,2, bg = False, square = True)
 
 
 # Initial Velocity panel (v0 = ?)
@@ -462,4 +484,28 @@ canvas1.create_text(statuspanelx+50, statuspanely+20, text="STATUS", fill ="blac
 statustext=ColourText(statuspanelx+35,statuspanely+56,"Waiting for user",charwidth=8*3-2 ,size=3)
 #endregion
    
+
+
+
+
+# region LineGun
+def rotatelinegun(myangle):
+    gunpoints = rotate(gunpointsoriginal,-myangle,(0,0))
+    gunpoints = [(x+gnpx, y+gnpy) for (x,y) in gunpoints]
+    flatpoints = [c for p in gunpoints for c in p]
+    return flatpoints
+
+# draw semicircle for elevation angle
+gnpx = 1710  # location of line drawn gun
+gnpy = 800
+gunpointsoriginal = [(0,0),(100,0),(100,-10),(0,-10)]
+flatpoints = rotatelinegun(angle)
+gunlines = canvas1.create_polygon(flatpoints,outline="light green", width = 2)
+
+arcradius = 30
+arcbox=(gnpx-arcradius,gnpy-arcradius,gnpx+arcradius,gnpy+arcradius)
+gunarc = canvas1.create_arc(arcbox,start=0,extent=angle,style="arc",width=1,outline="light green")
+canvas1.create_line(gnpx,gnpy,gnpx+110,gnpy,fill="light green")
+#endregion
+
 mainwin.mainloop()
