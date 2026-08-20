@@ -1,14 +1,18 @@
 #region todo
+# write name of typical object at height (cloud, weather balloon, U2 spy, SR2, etc, name of atmospheric ? picture?)
+# change play, ff butons to rotation buttons
+# 50 rounds of ammo. How many targets can you hit. Target moves after n seconds
+# put time at bottom of screen, with 1x 10x, 20x buttons, use 10x as default
+# make angle arc red when outside normal zone
 # level 0 tutorial
 # big target: hit anywhere between 0 and 10 km. Then 10km to 20 km, etc. Gives familiarity with evelation angles
-# level 10: hit moving targets.
-# Put instructions in play field, with pages 1,2,3, etc.
+# level 10: hit moving targets, xpos = at, xpos = sin(t), etc
+# Put instructions in play field, with pages 1,2,3, etc. Like Spelunky
 # Put rivets in panels
 # dark panel?
 # reduce images in gun animation just sensible ones
 # draw line gun next to Angle Text
 # Combine related LEDs into one panel. Look at Bluetti panel. Use colour 
-#       Combine Max Range, Muzzle Velocity
 #       Combine Shell Speeds (title), with arrows for horizontal and vertical
 #       Combine Shell Displacements (title), with arrows for horizontal and height
 #       leave target distance and time separate
@@ -22,6 +26,8 @@
 # buttons to inc/dec time speed
 # This can also be a non-violent basketball "shoot the hoop game"
 # Levels for cannon game: multi-target -> Ammo packs, etc, limited shots, shoot wall to break, etc
+
+# also shoot arrow into target (choose initial velocity)
 
 #Gunner2:
 # choose angle first -  this is motorcycle jumping game
@@ -253,7 +259,7 @@ xoffset = 20
 
 #region user interface
 RetroScreen = LEDlib.scrollboxobj(canvas1,x=10,y=140,width=1000,height=600)
-instructionbox = LEDlib.scrollboxsmallobj(canvas1,x=1100,y=20,width=800,height=600)
+instructionbox = LEDlib.scrollboxsmallobj(canvas1,x=560,y=20,width=800,height=600)
 
 canvas1.create_rectangle(2,2,MAXx-2,MAXy-2,outline="yellow")
 
@@ -270,9 +276,9 @@ for i in range(1,51):
     canvas1.create_line(screenx(i*1000),screeny(0)-2,screenx(i*1000),screeny(0)+2,fill="light green")
 
 canvas1.create_line(screenx(0),screeny(0),screenx(50000),screeny(0),fill="light green")
-canvas1.create_line(screenx(50000),screeny(0),screenx(50000),screeny(23200),fill="light green")
+canvas1.create_line(screenx(50000),screeny(0),screenx(50000),screeny(26200),fill="light green")
 
-for i in range(1,24):
+for i in range(1,27):
     canvas1.create_text(yaxisx+20,screeny(i*1000), text=str(i)+"km", fill = "light green", font = ("ubuntu",10, "bold")) 
     canvas1.create_line(yaxisx-2,screeny(i*1000),yaxisx+2,screeny(i*1000),fill="light green")  
 
@@ -364,10 +370,10 @@ def updateangle(mystep):
     canvas1.coords(gunlines,*flatpoints)
     canvas1.itemconfig(gunarc,extent = angle)
 
-def onclickPlus(): updateangle(0.1)
-def onclickPlusPlus(): updateangle(1)
-def onclickMinusMinus(): updateangle(-1)
-def onclickMinus(): updateangle(-0.1)
+def onclickPlus(): updateangle(-0.1)
+def onclickPlusPlus(): updateangle(-1)
+def onclickMinusMinus(): updateangle(1)
+def onclickMinus(): updateangle(0.1)
 
 
 playimage = PhotoImage(file="rightarrow.png")
@@ -377,7 +383,7 @@ frimage = PhotoImage(file="dleftarrow.png")
 fireimage = PhotoImage(file="fire.png")
 
 retroInputx = 1420
-retroInputy = 670
+retroInputy = 500
 
 buttonheight = retroInputy+80+85+12
 buttonwidth= 65
@@ -397,6 +403,22 @@ btnPlus.place(x=buttonleft+buttonwidth*3,y=buttonheight)
 
 btnPlusPlus = Button(mainwin,text = "",image=ffimage,command = onclickPlusPlus)
 btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
+
+def timespeed100x():
+    global STEPTIME
+    STEPTIME = 1000  # timer1 runs at 100 times per second: tm = tm + STEPTIME/1000
+
+def timespeed10x():
+    global STEPTIME
+    STEPTIME = 100
+
+def timespeed1x():
+    global STEPTIME
+    STEPTIME = 10
+
+btn1x = Button(mainwin,text = "1x", command = timespeed1x)
+btn10x = Button(mainwin,text = "10x", command = timespeed10x)
+btn100x = Button(mainwin,text = "100x", command = timespeed100x)
 #endregion
 
 
@@ -408,14 +430,14 @@ btnPlusPlus.place(x=buttonleft+buttonwidth*4,y=buttonheight)
 Panellib.drawpanel(canvas1, x=retroInputx-30,y=retroInputy,width=460,height=250,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=retroInputx-20,y=retroInputy+10,width=440,height=160,bevelsize=4)
 canvas1.create_text(retroInputx+134, retroInputy+130, text="GUN ELEVATION ANGLE (DEGREES)", fill ="white", font = ("ubuntu",8, "bold"))
-retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+20,retroInputy+50,angle,"red",9,9*8,2, bg = False, square = True)
+retroangletext = LEDlib.LEDscoreobjdp(canvas1,retroInputx+20,retroInputy+50,angle,"yellow",9,9*8,2, bg = False, square = True)
 
 
 # Initial Velocity panel (v0 = ?)
 panelx = retroInputx-40+10
 panely = retroInputy-300-120*2+60
-Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=120,bevelsize=4)
-Panellib.drawpanelinner(canvas1, x=panelx+10,y=panely+10,width=440,height=100,bevelsize=4)
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=240,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+10,y=panely+10,width=440,height=100+120,bevelsize=4)
 canvas1.create_text(panelx+110, panely+100-20, text="MUZZLE VELOCITY (M PER S)", fill ="white", font = ("ubuntu",8, "bold"))
 intialvelocitytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56-20,int(math.sqrt(r*g)),colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
@@ -425,37 +447,46 @@ rangepanely = retroInputy-300-120*2+60
 canvas1.create_text(rangepanelx+115, rangepanely+100-20, text="MAX RANGE (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
 rangetext=LEDlib.LEDtextobj(canvas1,rangepanelx+35,rangepanely+56-20,text=str(r),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
 
-targetpanelx = retroInputx-40+10
-targetpanely = retroInputy-300-120+60
-
-Panellib.drawpanel(canvas1, x=targetpanelx,y=targetpanely,width=230,height=120,bevelsize=4)
-Panellib.drawpanelinner(canvas1, x=targetpanelx+20,y=targetpanely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(targetpanelx+90, targetpanely+20, text="DISTANCE TO TARGET (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
-targettext=LEDlib.LEDscoreobj(canvas1,targetpanelx+35,targetpanely+56,t,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 # time panel (t = ?)
-panelx = retroInputx+190+10
-panely = retroInputy-300-120+60
-Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
+panelx = retroInputx-40+10
+panely = retroInputy-300+120+60+370
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
 canvas1.create_text(panelx+90, panely+20, text="TIME (SECONDS)", fill ="black", font = ("ubuntu",8, "bold"))
 timetext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,tm,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+btn1x.place(x=panelx+235,y=panely+56)
+btn10x.place(x=panelx+285,y=panely+56)
+btn100x.place(x=panelx+345,y=panely+56)
+
+
 
 # xloc panel (x = ?)
-panelx = retroInputx-40+10
-panely = retroInputy-300+120+60
-Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
-Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(panelx+115, panely+20, text="SHELL HORIZONTAL DISPLACEMENT (M)", fill ="black", font = ("ubuntu",8, "bold"))
-xtext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+panelx =     retroInputx-40+10
+panely =  retroInputy-300-120+60
+#Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
+#Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(panelx+125, panely+50, text="SHELL HORIZONTAL DISPLACEMENT (M)", fill ="white", font = ("ubuntu",8, "bold"))
+xtext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+6,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+
+# target distance
+targetpanelx = retroInputx+190+10
+targetpanely = retroInputy-300-120+60
+
+#Panellib.drawpanel(canvas1, x=targetpanelx,y=targetpanely,width=230,height=120,bevelsize=4)
+#Panellib.drawpanelinner(canvas1, x=targetpanelx+20,y=targetpanely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(targetpanelx+115, targetpanely+50, text="DISTANCE TO TARGET (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
+targettext=LEDlib.LEDscoreobj(canvas1,targetpanelx+35,targetpanely+6,t,colour="yellow",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+
+
 
 # yloc shell height panel (y = ?)
-panelx = retroInputx+190+10
+panelx = retroInputx+190+10-230
 panely = retroInputy-300+120+60
-Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
-Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
-canvas1.create_text(panelx+115, panely+20, text="SHELL HEIGHT (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
-ytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=120,bevelsize=4)
+Panellib.drawpanelinner(canvas1, x=panelx+20+130,y=panely+40,width=190,height=60,bevelsize=4)
+canvas1.create_text(panelx+115+130, panely+20, text="SHELL HEIGHT (METRES)", fill ="black", font = ("ubuntu",8, "bold"))
+ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130,panely+56,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 # horizontal speed panel (vx = ?)
 panelx = retroInputx-40+10
@@ -497,14 +528,14 @@ def rotatelinegun(myangle):
 
 # draw semicircle for elevation angle
 gnpx = 1710  # location of line drawn gun
-gnpy = 800
+gnpy = 800-170
 gunpointsoriginal = [(0,0),(100,0),(100,-10),(0,-10)]
 flatpoints = rotatelinegun(angle)
 gunlines = canvas1.create_polygon(flatpoints,outline="light green", width = 2)
 
-arcradius = 30
+arcradius = 40
 arcbox=(gnpx-arcradius,gnpy-arcradius,gnpx+arcradius,gnpy+arcradius)
-gunarc = canvas1.create_arc(arcbox,start=0,extent=angle,style="arc",width=1,outline="light green")
+gunarc = canvas1.create_arc(arcbox,start=0,extent=angle,style="arc",width=7,outline="yellow")
 canvas1.create_line(gnpx,gnpy,gnpx+110,gnpy,fill="light green")
 #endregion
 
