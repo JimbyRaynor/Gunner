@@ -1,8 +1,8 @@
 #region todo
-# write name of typical object at height (cloud, weather balloon, U2 spy, SR2, etc, name of atmospheric ? picture?)
+# write name of typical object at height (cloud, weather balloon, U2 spy, SR2, etc, name of atmosphere ? picture?)
+# vertical speed: draw up arrow for up, down arrow for down
 # change play, ff butons to rotation buttons
 # 50 rounds of ammo. How many targets can you hit. Target moves after n seconds
-# put time at bottom of screen, with 1x 10x, 20x buttons, use 10x as default
 # make angle arc red when outside normal zone
 # level 0 tutorial
 # big target: hit anywhere between 0 and 10 km. Then 10km to 20 km, etc. Gives familiarity with evelation angles
@@ -12,10 +12,6 @@
 # dark panel?
 # reduce images in gun animation just sensible ones
 # draw line gun next to Angle Text
-# Combine related LEDs into one panel. Look at Bluetti panel. Use colour 
-#       Combine Shell Speeds (title), with arrows for horizontal and vertical
-#       Combine Shell Displacements (title), with arrows for horizontal and height
-#       leave target distance and time separate
 # draw Mount Everest
 # Shoot down U2 spy plane
 # make to scale then compare speeds of
