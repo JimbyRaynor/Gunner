@@ -1,8 +1,9 @@
 #region todo
 # write name of typical object at height (cloud, weather balloon, U2 spy, SR2, etc, name of atmosphere ? picture?)
 # Shell Cam: Mountains, below cloud, in cloud, above cloud with sun, dark sky with sun, curved earth
-# height readout is in bottom centre 
-# vertical speed: draw up arrow for up, down arrow for down
+#      draw different types of cloud up to 18000m
+#      draw different types of aircraft in Shell Cam, and weather balloons
+# vertical speed: draw up arrow for up, down arrow for down, scale according to speed
 # change play, ff butons to rotation buttons
 # 50 rounds of ammo. How many targets can you hit. Target moves after n seconds
 # make angle arc red when outside normal zone
@@ -30,6 +31,7 @@
 # also shoot arrow into target (choose initial velocity)
 # make dark green panel style, and blue and red?
 # story mode, easy to hard?
+# draw clouds at different heights
 
 #Gunner2:
 # choose angle first -  this is motorcycle jumping game
@@ -180,9 +182,26 @@ def resetball():
 
 
 def moveball():
-    global ballx, bally, gamestate
+    global ballx, bally, gamestate, heighttype
     ballx  = vx*tm + ballx0
     bally = -0.5*g*tm**2+vy*tm+bally0
+    if bally <= 0:
+        heighttype = "GROUND"
+    elif bally <= 4000:
+        heighttype = "LOW TROPOSPHERE"
+    elif bally <= 7000:
+        heighttype = "MID TROPOSPHERE"
+    elif bally <= 12000:
+        heighttype = "UPPER TROPOSPHERE"
+    elif bally <= 13000:
+        heighttype = "TROPOPAUSE"
+    elif bally <= 20000:
+        heighttype = "LOWER STRATOSPHERE"
+    elif bally <= 30000:
+        heighttype = "MID STRATOSPHERE"
+    else:
+       heighttype = "UPPER STRATOSPHERE"
+    canvas1.itemconfigure(heighttext,text=heighttype)
     ball.resetposition(screenx(ballx)-15+8, screeny(bally)-10)
     xtext.update(int(ballx))
     vxtext.update(int(vx))
@@ -253,6 +272,7 @@ v = math.sqrt(r*g)
 vx = v*cosd(angle)
 vy = v*sind(angle)
 xoffset = 20
+heighttype = "GROUND"
 #endregion
 
 
@@ -313,18 +333,8 @@ def timer1():
     tm = tm + STEPTIME/1000
     moveball()
     if gamestate == GameStates.PROJECTILEFLYING:
-       print("ball tm  = ",tm)
-       print("ball x  = ",vx*tm)
-       print("ball y = ",-0.5*g*tm*tm+v*sind(angle)*tm+bally0)
-       print("screeny = ",screeny(-0.5*g*tm*tm+v*sind(angle)*tm+bally0))
        timetext.update(int(tm))
        mainwin.after(10,timer1)
-    else:
-        b = angle
-        b2 = 2 * b / 57.3; # convert b to radians
-        i0 = r * math.sin(b2)
-        print("True distance = ", i0)
-        print("ball x0  = ",ballx0)
 #endregion
 
 
@@ -474,9 +484,11 @@ panelx = retroInputx+190+10-230
 panely = retroInputy-300+120+60
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=120+120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+10,width=420,height=100+120,bevelsize=4)
-canvas1.create_text(panelx+115+130, panely+100+120-6, text="SHELL HEIGHT (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
 canvas1.create_text(panelx+58, panely+24, text="SHELL CAM", fill ="white", font = ("ubuntu",8, "bold"))
-ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130,panely+56+120,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+dx = -100
+canvas1.create_text(panelx+115+130+dx, panely+100+120-6, text="SHELL HEIGHT (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
+heighttext = canvas1.create_text(panelx+378+dx+70, panely+100+120-6, text=heighttype, fill ="white", font = ("ubuntu",8, "bold"))
+ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130+dx,panely+56+120,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 
 
