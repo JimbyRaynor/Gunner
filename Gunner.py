@@ -1,6 +1,9 @@
 #region todo
-# write name of typical object at height (cloud, weather balloon, U2 spy, SR2, etc, name of atmosphere ? picture?)
+# "ABOUT" button: based on 101 Basic Games edited by David Adl 1972?.
+# "over target" can flash in red directly under "horizontal displacement"
+#    USE state machine to get this exactly correct. Don't have Over Target when hit!. Only one state allowed
 # Shell Cam: Mountains, below cloud, in cloud, above cloud with sun, dark sky with sun, curved earth
+# draw  typical object at height (cloud, weather balloon, U2 spy, SR2, etc, name of atmosphere ? picture?)
 #      draw different types of cloud up to 18000m
 #      draw different types of aircraft in Shell Cam, and weather balloons
 # vertical speed: draw up arrow for up, down arrow for down, scale according to speed
@@ -148,8 +151,6 @@ def screenx(x): # converts real x position to a screen position
 def screeny(y): # converts real y position to a screen position
     return int(groundy-y*scaley)
 
-import math
-
 def rotate(points, angle_deg, pivot):
     angle = math.radians(angle_deg)
     px, py = pivot
@@ -179,6 +180,7 @@ def resetball():
     ball.resetposition(screenx(ballx0)-15+8, screeny(bally0)-10) # ball is a big 8 by 8 square with a dot in it!!!!
     ball.undraw()
     intialvelocitytext.update(int(v))
+    canvas1.itemconfigure(statusLED,text="")
 
 
 def moveball():
@@ -202,6 +204,10 @@ def moveball():
     else:
        heighttype = "UPPER STRATOSPHERE"
     canvas1.itemconfigure(heighttext,text=heighttype)
+    if ballx > t+100:
+        canvas1.itemconfigure(statusLED,text="OVER TARGET")
+    elif bally <= 0 and ballx < t -100:
+        canvas1.itemconfigure(statusLED,text="SHORT OF TARGET")
     ball.resetposition(screenx(ballx)-15+8, screeny(bally)-10)
     xtext.update(int(ballx))
     vxtext.update(int(vx))
@@ -303,17 +309,12 @@ for i in range(1,27):
     canvas1.create_text(yaxisx+20,screeny(i*1000), text=str(i)+"km", fill = "light green", font = ("ubuntu",10, "bold")) 
     canvas1.create_line(yaxisx-2,screeny(i*1000),yaxisx+2,screeny(i*1000),fill="light green")  
 
-instructionbox.scrollboxadd("Instructions")
-instructionbox.scrollboxadd(" ")
-instructionbox.scrollboxadd("You are the officer-in-charge giving orders to a gun crew,")
-instructionbox.scrollboxadd("telling them the degrees of elevation you estimate")
-instructionbox.scrollboxadd("will place a projectile on target.")
-instructionbox.scrollboxadd("A hit within 100 metres of the target will destroy it.")
-instructionbox.scrollboxadd(" ")
-instructionbox.scrollboxadd(" ")
-instructionbox.scrollboxadd(" ")
-#endregion
 
+instructionbox.scrollboxadd("You are the officer-in-charge giving orders to a gun crew,")
+instructionbox.scrollboxadd("telling them the degrees of elevation you estimate will")
+instructionbox.scrollboxadd("place the shell on target.")
+instructionbox.scrollboxadd("A hit within 100 metres of the target will destroy it.")
+#endregion
 
 myship = LEDlib.LEDobj(canvas1,10,10,dx = 0,dy = 0,CharPoints=charAA, pixelsize = 2)
 myship2 = LEDlib.LEDobj(canvas1,40,10,dx = 0,dy = 0,CharPoints=charAB, pixelsize = 2)
@@ -466,6 +467,7 @@ panely =  retroInputy-300-120+60
 #Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
 #Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
 canvas1.create_text(panelx+125, panely+50, text="SHELL HORIZONTAL DISPLACEMENT (M)", fill ="white", font = ("ubuntu",8, "bold"))
+statusLED = canvas1.create_text(panelx+120, panely+80, text="", fill ="red", font = ("ubuntu",12, "bold"))
 xtext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+6,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
 
 # target distance
@@ -485,11 +487,12 @@ panely = retroInputy-300+120+60
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=120+120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+10,width=420,height=100+120,bevelsize=4)
 canvas1.create_text(panelx+58, panely+24, text="SHELL CAM", fill ="white", font = ("ubuntu",8, "bold"))
+canvas1.create_text(panelx+258, panely+24, text="Note: True heights will be lower due to air resistance", fill ="orange", font = ("ubuntu",8, "bold"))
 dx = -100
 canvas1.create_text(panelx+115+130+dx, panely+100+120-6, text="SHELL HEIGHT (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
 heighttext = canvas1.create_text(panelx+378+dx+70, panely+100+120-6, text=heighttype, fill ="white", font = ("ubuntu",8, "bold"))
 ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130+dx,panely+56+120,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
-
+Shellcam = Spriteobj(canvas1,"png/ShellCam/ground64.png", x=panelx+200,y=panely+100)
 
 
 
