@@ -11,6 +11,12 @@
 # 50 rounds of ammo. How many targets can you hit. Target moves after n seconds
 # make angle arc red when outside normal zone
 # level 0 tutorial
+# Lessons instead of levels? Lesson 1, Lesson 2, etc
+# Set t = 120 (say)
+# Now solve for hitting target at (x0,y0)
+#   theta = ?  (make sure there is a solution)
+#   v0 = ? (different game)
+#   v0=?, theta = ? (simultaneous equations)
 # big target: hit anywhere between 0 and 10 km. Then 10km to 20 km, etc. Gives familiarity with evelation angles
 # level 10: hit moving targets, xpos = at, xpos = sin(t), etc
 # Put instructions in play field, with pages 1,2,3, etc. Like Spelunky
@@ -487,12 +493,12 @@ panely = retroInputy-300+120+60
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=120+120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+10,width=420,height=100+120,bevelsize=4)
 canvas1.create_text(panelx+58, panely+24, text="SHELL CAM", fill ="white", font = ("ubuntu",8, "bold"))
-canvas1.create_text(panelx+258, panely+24, text="Note: True heights will be lower due to air resistance", fill ="orange", font = ("ubuntu",8, "bold"))
+canvas1.create_text(panelx+228, panely+219, text="Note: True heights will be lower due to air resistance", fill ="orange", font = ("ubuntu",8, "bold"))
 dx = -100
-canvas1.create_text(panelx+115+130+dx, panely+100+120-6, text="SHELL HEIGHT (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
-heighttext = canvas1.create_text(panelx+378+dx+70, panely+100+120-6, text=heighttype, fill ="white", font = ("ubuntu",8, "bold"))
-ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130+dx,panely+56+120,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
-Shellcam = Spriteobj(canvas1,"png/ShellCam/ground64.png", x=panelx+200,y=panely+100)
+canvas1.create_text(panelx+115+130+dx+80, panely+100+100-4, text="SHELL HEIGHT (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
+heighttext = canvas1.create_text(panelx+378+dx+90, panely+40, text=heighttype, fill ="white", font = ("ubuntu",8, "bold"))
+ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130+dx+80,panely+56+102,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
+Shellcam = Spriteobj(canvas1,"png/ShellCam/ground64.png", x=panelx+200+30,y=panely+100)
 
 
 
