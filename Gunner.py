@@ -23,7 +23,6 @@
 # Put rivets in panels
 # dark panel?
 # reduce images in gun animation to just sensible ones
-# draw line gun next to Angle Text
 # draw Mount Everest
 # Shoot down U2 spy plane
 # make to scale then compare speeds of
@@ -32,7 +31,6 @@
 # Lockheed-martin Blackbird
 # achievements. Shoot above clouds, troposhpere, etc. hit SR71?
 # try camoflauge over panels
-# buttons to inc/dec time speed
 # This can also be a non-violent basketball "shoot the hoop game"
 # Levels for cannon game: multi-target -> Ammo packs, etc, limited shots, shoot wall to break, etc
 # LED chars play on top of GUNNER
@@ -49,9 +47,7 @@
 
 #  display equation of motion so students can solve it
 #  do for other games as well
-#  no physics step simulations
-
-# need to inc 0.1 of a degree, make a digit object with a knob underneath
+#  no physics, step simulations
 
 # build tools for all games
 # -> explosion tool
@@ -238,15 +234,24 @@ MAXy = 1000
 
 #region classes
 class Spriteobj:
-    def __init__(self, canvas, filename="",x=0,y=0,dx=0,dy=0):
+    def __init__(self, canvas, filelist=[],x=0,y=0,dx=0,dy=0):
          self.alive = True
          self.x = x
          self.y = y
          self.dx = dx
          self.dy = dy
          self.canvas = canvas
-         self.image = PhotoImage(file=filename)
+         self.images = []
+         self.index = 0
+         for i in range(len(filelist)):
+             myimage = PhotoImage(file=filelist[i])
+             self.images.append(myimage)
+         self.image = self.images[0]
          self.sprite  = canvas.create_image(x,y,image=self.image)
+    def load(self, myindex):
+        self.image = self.images[myindex]
+        self.canvas.itemconfigure(self.sprite,image=self.image)
+
 #endregion
 
 mainwin = Tk()
@@ -498,7 +503,8 @@ dx = -100
 canvas1.create_text(panelx+115+130+dx+80, panely+100+100-4, text="SHELL HEIGHT (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
 heighttext = canvas1.create_text(panelx+378+dx+90, panely+40, text=heighttype, fill ="white", font = ("ubuntu",8, "bold"))
 ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130+dx+80,panely+56+102,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
-Shellcam = Spriteobj(canvas1,"png/ShellCam/ground64.png", x=panelx+200+30,y=panely+100)
+Shellcam = Spriteobj(canvas1,["png/ShellCam/ground64.png","png/ShellCam/belowcloud8.png"], x=panelx+200+30,y=panely+100)
+Shellcam.load(1)
 
 
 
