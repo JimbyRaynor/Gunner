@@ -189,14 +189,18 @@ def moveball():
     global ballx, bally, gamestate, heighttype
     ballx  = vx*tm + ballx0
     bally = -0.5*g*tm**2+vy*tm+bally0
-    if bally <= 0:
+    if bally <= 300:
         heighttype = "GROUND"
+        Shellcam.load(0)
     elif bally <= 4000:
         heighttype = "LOW TROPOSPHERE"
+        Shellcam.load(1)
     elif bally <= 7000:
         heighttype = "MID TROPOSPHERE"
+        Shellcam.load(2)
     elif bally <= 12000:
         heighttype = "UPPER TROPOSPHERE"
+        Shellcam.load(3)
     elif bally <= 13000:
         heighttype = "TROPOPAUSE"
     elif bally <= 20000:
@@ -503,8 +507,8 @@ dx = -100
 canvas1.create_text(panelx+115+130+dx+80, panely+100+100-4, text="SHELL HEIGHT (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
 heighttext = canvas1.create_text(panelx+378+dx+90, panely+40, text=heighttype, fill ="white", font = ("ubuntu",8, "bold"))
 ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130+dx+80,panely+56+102,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
-Shellcam = Spriteobj(canvas1,["png/ShellCam/ground64.png","png/ShellCam/belowcloud8.png"], x=panelx+200+30,y=panely+100)
-Shellcam.load(1)
+Shellcam = Spriteobj(canvas1,["png/ShellCam/ground64.png","png/ShellCam/belowcloud8.png","png/ShellCam/abovecloud8.png","png/ShellCam/hightropo8.png"], x=panelx+200+30,y=panely+100)
+Shellcam.load(0)
 
 
 
