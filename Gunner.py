@@ -2,9 +2,7 @@
 # "ABOUT" button: based on 101 Basic Games edited by David Adl 1972?.
 # "over target" can flash in red directly under "horizontal displacement"
 #    USE state machine to get this exactly correct. Don't have Over Target when hit!. Only one state allowed
-# Shell Cam: Mountains, below cloud, in cloud, above cloud with sun, dark sky with sun, curved earth
 # draw  typical object at height (cloud, weather balloon, U2 spy, SR2, etc, name of atmosphere ? picture?)
-#      draw different types of cloud up to 18000m
 #      draw different types of aircraft in Shell Cam, and weather balloons
 # vertical speed: draw up arrow for up, down arrow for down, scale according to speed
 # change play, ff butons to rotation buttons
@@ -203,10 +201,13 @@ def moveball():
         Shellcam.load(3)
     elif bally <= 13000:
         heighttype = "TROPOPAUSE"
+        Shellcam.load(3)
     elif bally <= 20000:
+        Shellcam.load(4)
         heighttype = "LOWER STRATOSPHERE"
     elif bally <= 30000:
         heighttype = "MID STRATOSPHERE"
+        Shellcam.load(5)
     else:
        heighttype = "UPPER STRATOSPHERE"
     canvas1.itemconfigure(heighttext,text=heighttype)
@@ -507,7 +508,7 @@ dx = -100
 canvas1.create_text(panelx+115+130+dx+80, panely+100+100-4, text="SHELL HEIGHT (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
 heighttext = canvas1.create_text(panelx+378+dx+90, panely+40, text=heighttype, fill ="white", font = ("ubuntu",8, "bold"))
 ytext=LEDlib.LEDscoreobj(canvas1,panelx+35+130+dx+80,panely+56+102,0,colour="light green",pixelsize = 4, charwidth=8*4 ,numzeros = 5, solid = False, square=False)
-Shellcam = Spriteobj(canvas1,["png/ShellCam/ground64.png","png/ShellCam/belowcloud8.png","png/ShellCam/abovecloud8.png","png/ShellCam/hightropo8.png"], x=panelx+200+30,y=panely+100)
+Shellcam = Spriteobj(canvas1,["png/ShellCam/ground64.png","png/ShellCam/belowcloud8.png","png/ShellCam/abovecloud8.png","png/ShellCam/hightropo8.png","png/ShellCam/lowstrat.png","png/ShellCam/highstrat.png"], x=panelx+200+30,y=panely+100)
 Shellcam.load(0)
 
 
