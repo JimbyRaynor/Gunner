@@ -1,4 +1,5 @@
 #region todo
+# 7 rounds of ammo. Multiple targets: easy wide target 10 points, medium 100 points, hard (exact 300 points)?
 # "ABOUT" button: based on 101 Basic Games edited by David Adl 1972?.
 # "over target" can flash in red directly under "horizontal displacement"
 #    USE state machine to get this exactly correct. Don't have Over Target when hit!. Only one state allowed
@@ -59,6 +60,9 @@
 
 #endregion
 
+
+
+
 #region import
 import math
 import sys
@@ -79,6 +83,9 @@ import Panellib
 current_script_directory = os.path.dirname(os.path.abspath(__file__))
 os.chdir(current_script_directory)
 #endregion
+
+
+
 
 #region sprites
 # only simple 8,16 bit graphics 
@@ -232,6 +239,13 @@ def moveball():
          bally=0
          ball.resetposition(screenx(ballx)-15+8, screeny(bally)-10)
          gamestate = GameStates.IMPACT
+         e = int(t - i0);
+         if (abs(e) < 100):
+           statustext.update("Target destroyed. "+str(s)+ " rounds of ammunition expended")
+         elif (e < 0):
+           statustext.update("Over target by " + str(abs(e))+ " metres")
+         else:   
+           statustext.update("Short of target by " + str(abs(e))+ " metres")
 #endregion
 
 MAXx = 1914
@@ -301,13 +315,13 @@ heighttype = "GROUND"
 
 
 #region user interface
-RetroScreen = LEDlib.scrollboxobj(canvas1,x=10,y=140,width=1000,height=600)
+# RetroScreen = LEDlib.scrollboxobj(canvas1,x=10,y=140,width=1000,height=600)
 instructionbox = LEDlib.scrollboxsmallobj(canvas1,x=560,y=20,width=800,height=600)
 
 #canvas1.create_rectangle(2,2,MAXx-2,MAXy-2,outline="yellow")
 
-RetroScreen.scrollboxadd("Maximum range of your gun is "+str(r)+" metres")
-RetroScreen.scrollboxadd(" ")
+# RetroScreen.scrollboxadd("Maximum range of your gun is "+str(r)+" metres")
+# RetroScreen.scrollboxadd(" ")
 
 titletext = ColourTextSquare(x=20,y=20,mytext="Gunner",charwidth=8*12-10,size=12)
 xaxisy = screeny(0)
@@ -340,7 +354,7 @@ ball = LEDlib.LEDobj(canvas1,screenx(ballx0)-15+8,screeny(bally0)-10,dx = 0,dy =
 ball.undraw()
 
 
-RetroScreen.scrollboxadd("Distance to target is "+str(t)+" metres")
+# RetroScreen.scrollboxadd("Distance to target is "+str(t)+" metres")
 
 
 
@@ -368,21 +382,20 @@ def onclickFire():
     resetball()
     timer1()
     s = s + 1
-    b = angle
-    b2 = 2 * b / 57.3; # convert b to radians
-    i0 = r * math.sin(b2)
-    print("True distance = ", i0)
-    e = int(t - i0);
-    if (abs(e) < 100):
-       RetroScreen.scrollboxadd("*** Target destroyed *** "+str(s)+ " rounds of ammunition expended")
-       enemyhit = True;
-       z = z + 1
-       if (z < 4):
-         RetroScreen.scrollboxadd("The forward observer has sighted more enemy activity...")
-    elif (e < 0):
-         RetroScreen.scrollboxadd("Over target by " + str(abs(e))+ " metres")
-    else:   
-         RetroScreen.scrollboxadd("Short of target by " + str(abs(e))+ " metres")
+    # b = angle
+    # b2 = 2 * b / 57.3; # convert b to radians
+    # i0 = r * math.sin(b2)
+    # e = int(t - i0);
+    # if (abs(e) < 100):
+    #    RetroScreen.scrollboxadd("*** Target destroyed *** "+str(s)+ " rounds of ammunition expended")
+    #    enemyhit = True;
+    #    z = z + 1
+    #    if (z < 4):
+    #      RetroScreen.scrollboxadd("The forward observer has sighted more enemy activity...")
+    # elif (e < 0):
+    #      RetroScreen.scrollboxadd("Over target by " + str(abs(e))+ " metres")
+    # else:   
+    #      RetroScreen.scrollboxadd("Short of target by " + str(abs(e))+ " metres")
 
 def updateangle(mystep):
     global angle
@@ -537,7 +550,7 @@ statuspanelwidth = 1390
 Panellib.drawpanel(canvas1, x=statuspanelx,y=statuspanely,width=statuspanelwidth,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=statuspanelx+10,y=statuspanely+10,width=statuspanelwidth-20,height=100,bevelsize=4)
 canvas1.create_text(statuspanelx+38, statuspanely+24, text="STATUS", fill ="white", font = ("ubuntu",8, "bold"))
-statustext=ColourText(statuspanelx+35,statuspanely+56,"Waiting for user",charwidth=8*3-2 ,size=3)
+statustext=ColourText(statuspanelx+35,statuspanely+56,"Ready. Maximum range of your gun is "+str(r)+" metres",charwidth=8*3 ,size=3)
 
 # time panel (t = ?)
 panelx = retroInputx-40+10
