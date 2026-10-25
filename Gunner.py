@@ -279,7 +279,7 @@ def moveball():
          e = int(t - i0);
          if (abs(e) < 100):
            statustext.update("Target destroyed. "+str(s)+ " rounds of ammunition expended")
-           target.loadchar(MissleExplosionList[2])
+           timerMissleExplosion()
          elif (e < 0):
            statustext.update("Over target by " + str(abs(e))+ " metres")
          else:   
@@ -347,6 +347,7 @@ vx = v*cosd(angle)
 vy = v*sind(angle)
 xoffset = 20
 heighttype = "GROUND"
+MissleExplosionNumber = 0
 #endregion
 
 
@@ -401,7 +402,7 @@ ball.undraw()
 
 
 
-#region Timer
+#region Timers
 def timer1():
     global tm
     tm = tm + STEPTIME/1000
@@ -409,6 +410,14 @@ def timer1():
     if gamestate == GameStates.PROJECTILEFLYING:
        timetext.update(int(tm))
        mainwin.after(10,timer1)
+
+def timerMissleExplosion():
+    global MissleExplosionNumber
+    MissleExplosionNumber += 1
+    if MissleExplosionNumber < len(MissleExplosionList):
+        target.loadchar(MissleExplosionList[MissleExplosionNumber])
+        mainwin.after(200,timerMissleExplosion)
+
 #endregion
 
 
@@ -416,7 +425,7 @@ def timer1():
 
 #region buttons
 def onclickFire():
-    global s, z, ballx, bally, tm, gamestate
+    global s, z, ballx, bally, tm, gamestate, MissleExplosionNumber
     gamestate = GameStates.PROJECTILEFLYING
     statustext.update("Shell Fired. Waiting for impact")
     tm = 0
@@ -426,6 +435,7 @@ def onclickFire():
     timer1()
     s = s + 1
     target.loadchar(charBullseye3)
+    MissleExplosionNumber = 0
 
 def updateangle(mystep):
     global angle
