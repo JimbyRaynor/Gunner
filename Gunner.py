@@ -1,5 +1,5 @@
 #region todo
-# shell explosion
+# shell explosion, add end-frames to missle explosion 
 # levels: Beginner explosion range 3000m
 #       : Standard explosion range 100m
 #       : Tutorials
@@ -14,6 +14,7 @@
 # -->> choose muzzle velocity
 # -->> solve quadratic equation
 # high velocity straight line, y = mt+c. Choose time for explosion, or make a depth charge game.
+# shoot moving target. Once angle is set, it is a simple time calculation
 # Draw Moon, Sun, Cloud parts, Land, Mountains, Blackbird SR-7?, stars 
 # make panels lighter and gray stripes like GenX metal grownup chart?
 # Can this be used to evaluate expressions like (x+y)+z and 2x, etc ?
@@ -148,6 +149,24 @@ charMissleExplosion7 = [(3,4, "#FF0000"), (7,4, "#FF0000"), (18,4, "#FFFF00"), (
 
 MissleExplosionList = [charMissleExplosion1, charMissleExplosion2,charMissleExplosion3,charMissleExplosion4, charMissleExplosion5, charMissleExplosion6, charMissleExplosion7]
 
+
+charShellExplosion1 = [(11,22, "#FFFFFF"), (12,22, "#FFFFFF"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA")] 
+charShellExplosion2 = [(11,21, "#FF0000"), (11,22, "#FFFFFF"), (12,22, "#FFFFFF"), (13,22, "#FF0000"), (9,23, "#FFFFFF"), (10,23, "#FF0000"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA"), (14,23, "#FFFFFF")] 
+charShellExplosion3 = [(11,20, "#FF5900"), (10,21, "#FF5900"), (11,21, "#FF0000"), (12,21, "#FFFF00"), (10,22, "#FFFF00"), (11,22, "#FFFFFF"), (12,22, "#FFFFFF"), (13,22, "#FF0000"), (7,23, "#FFFFFF"), (10,23, "#FF0000"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA"), (15,23, "#FFFFFF")] 
+charShellExplosion4 = [(8,20, "#8B4513"), (9,20, "#8B4513"), (11,20, "#FF5900"), (12,20, "#8B4513"), (14,20, "#8B4513"), (10,21, "#8B4513"), (11,21, "#FF0000"), (12,21, "#FFFF00"), (13,21, "#8B4513"), (9,22, "#8B4513"), (10,22, "#FFFF00"), (11,22, "#FFFFFF"), (12,22, "#FFFFFF"), (13,22, "#FF0000"), (14,22, "#8B4513"), (7,23, "#FFFFFF"), (10,23, "#FF0000"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA"), (15,23, "#FFFFFF")] 
+charShellExplosion5 = [(8,17, "#8B4513"), (12,17, "#8B4513"), (6,18, "#8B4513"), (11,18, "#8B4513"), (16,18, "#8B4513"), (5,19, "#8B4513"), (7,19, "#8B4513"), (15,19, "#8B4513"), (8,20, "#8B4513"), (11,20, "#FF5900"), (12,20, "#8B4513"), (14,20, "#8B4513"), (13,21, "#8B4513"), (9,22, "#8B4513"), (13,22, "#FF0000"), (14,22, "#8B4513"), (7,23, "#FFFFFF"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA"), (15,23, "#FFFFFF")] 
+charShellExplosion6 = [(8,9, "#8B4513"), (19,9, "#8B4513"), (10,11, "#8B4513"), (14,12, "#8B4513"), (2,13, "#8B4513"), (7,13, "#8B4513"), (11,13, "#8B4513"), (18,13, "#8B4513"), (4,14, "#8B4513"), (16,14, "#8B4513"), (19,14, "#8B4513"), (4,15, "#8B4513"), (21,15, "#8B4513"), (3,16, "#8B4513"), (22,16, "#8B4513"), (8,17, "#8B4513"), (12,17, "#8B4513"), (19,17, "#8B4513"), (3,18, "#8B4513"), (6,18, "#8B4513"), (11,18, "#8B4513"), (16,18, "#8B4513"), (5,19, "#8B4513"), (7,19, "#8B4513"), (15,19, "#8B4513"), (8,20, "#8B4513"), (12,20, "#8B4513"), (9,22, "#8B4513"), (14,22, "#8B4513"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA")] 
+charShellExplosion7 = [(14,5, "#8B4513"), (8,6, "#8B4513"), (10,6, "#8B4513"), (6,7, "#8B4513"), (20,7, "#8B4513"), (19,9, "#8B4513"), (3,10, "#8B4513"), (14,10, "#8B4513"), (5,11, "#8B4513"), (10,11, "#8B4513"), (14,12, "#8B4513"), (20,12, "#8B4513"), (11,13, "#8B4513"), (18,13, "#8B4513"), (9,14, "#8B4513"), (16,14, "#8B4513"), (19,15, "#8B4513"), (3,16, "#8B4513"), (22,16, "#8B4513"), (8,17, "#8B4513"), (12,17, "#8B4513"), (19,17, "#8B4513"), (3,18, "#8B4513"), (11,18, "#8B4513"), (16,18, "#8B4513"), (4,19, "#8B4513"), (7,19, "#8B4513"), (15,19, "#8B4513"), (19,19, "#8B4513"), (20,19, "#8B4513"), (8,20, "#8B4513"), (12,20, "#8B4513"), (16,20, "#8B4513"), (18,21, "#8B4513"), (3,22, "#8B4513"), (5,22, "#8B4513"), (14,22, "#8B4513"), (5,23, "#8B4513"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA"), (19,23, "#8B4513")] 
+charShellExplosion8 = [(14,7, "#8B4513"), (8,8, "#8B4513"), (11,8, "#8B4513"), (6,9, "#8B4513"), (19,9, "#8B4513"), (20,9, "#8B4513"), (3,12, "#8B4513"), (14,12, "#8B4513"), (20,12, "#8B4513"), (5,13, "#8B4513"), (10,13, "#8B4513"), (18,13, "#8B4513"), (14,14, "#8B4513"), (16,14, "#8B4513"), (11,15, "#8B4513"), (14,15, "#8B4513"), (19,15, "#8B4513"), (9,16, "#8B4513"), (22,16, "#8B4513"), (8,17, "#8B4513"), (12,17, "#8B4513"), (9,18, "#8B4513"), (11,18, "#8B4513"), (16,18, "#8B4513"), (4,19, "#8B4513"), (15,19, "#8B4513"), (19,19, "#8B4513"), (20,19, "#8B4513"), (3,20, "#8B4513"), (8,20, "#8B4513"), (12,20, "#8B4513"), (7,21, "#8B4513"), (9,21, "#8B4513"), (11,21, "#8B4513"), (16,21, "#8B4513"), (18,21, "#8B4513"), (20,21, "#8B4513"), (3,22, "#8B4513"), (5,22, "#8B4513"), (14,22, "#8B4513"), (5,23, "#8B4513"), (8,23, "#8B4513"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA"), (19,23, "#8B4513")] 
+charShellExplosion9 = [(14,9, "#8B4513"), (8,10, "#8B4513"), (11,10, "#8B4513"), (6,11, "#8B4513"), (10,13, "#8B4513"), (18,13, "#8B4513"), (3,14, "#8B4513"), (16,14, "#8B4513"), (5,15, "#8B4513"), (19,15, "#8B4513"), (20,16, "#8B4513"), (12,17, "#8B4513"), (14,17, "#8B4513"), (9,18, "#8B4513"), (11,18, "#8B4513"), (22,18, "#8B4513"), (15,19, "#8B4513"), (8,20, "#8B4513"), (11,20, "#8B4513"), (12,20, "#8B4513"), (16,20, "#8B4513"), (4,21, "#8B4513"), (7,21, "#8B4513"), (9,21, "#8B4513"), (11,21, "#8B4513"), (15,21, "#8B4513"), (16,21, "#8B4513"), (18,21, "#8B4513"), (19,21, "#8B4513"), (20,21, "#8B4513"), (3,22, "#8B4513"), (5,22, "#8B4513"), (14,22, "#8B4513"), (5,23, "#8B4513"), (8,23, "#8B4513"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA"), (19,23, "#8B4513")] 
+charShellExplosion10 = [(6,13, "#8B4513"), (8,13, "#8B4513"), (10,13, "#8B4513"), (11,13, "#8B4513"), (16,14, "#8B4513"), (10,16, "#8B4513"), (18,16, "#8B4513"), (3,17, "#8B4513"), (12,17, "#8B4513"), (14,17, "#8B4513"), (16,17, "#8B4513"), (5,18, "#8B4513"), (9,18, "#8B4513"), (11,18, "#8B4513"), (19,18, "#8B4513"), (15,19, "#8B4513"), (20,19, "#8B4513"), (12,20, "#8B4513"), (16,20, "#8B4513"), (22,20, "#8B4513"), (7,21, "#8B4513"), (9,21, "#8B4513"), (11,21, "#8B4513"), (12,21, "#8B4513"), (15,21, "#8B4513"), (18,21, "#8B4513"), (3,22, "#8B4513"), (6,22, "#8B4513"), (9,22, "#8B4513"), (14,22, "#8B4513"), (16,22, "#8B4513"), (18,22, "#8B4513"), (20,22, "#8B4513"), (5,23, "#8B4513"), (8,23, "#8B4513"), (11,23, "#AAAAAA"), (12,23, "#AAAAAA"), (20,23, "#8B4513")] 
+charShellExplosion11 = [(12,17, "#8B4513"), (9,18, "#8B4513"), (11,18, "#8B4513"), (6,19, "#8B4513"), (8,19, "#8B4513"), (10,19, "#8B4513"), (15,19, "#8B4513"), (6,20, "#8B4513"), (9,20, "#8B4513"), (12,20, "#8B4513"), (14,20, "#8B4513"), (16,20, "#8B4513"), (5,21, "#8B4513"), (9,21, "#8B4513"), (11,21, "#8B4513"), (3,22, "#8B4513"), (6,22, "#8B4513"), (7,22, "#8B4513"), (9,22, "#8B4513"), (11,22, "#8B4513"), (12,22, "#8B4513"), (14,22, "#8B4513"), (15,22, "#8B4513"), (16,22, "#8B4513"), (18,22, "#8B4513"), (3,23, "#8B4513"), (5,23, "#8B4513"), (6,23, "#8B4513"), (8,23, "#8B4513"), (9,23, "#8B4513"), (12,23, "#8B4513"), (14,23, "#8B4513"), (16,23, "#8B4513"), (18,23, "#8B4513"), (20,23, "#8B4513")] 
+charShellExplosion12 = [(10,19, "#8B4513"), (9,20, "#8B4513"), (11,20, "#8B4513"), (12,20, "#8B4513"), (9,21, "#8B4513"), (11,21, "#8B4513"), (12,21, "#8B4513"), (14,21, "#8B4513"), (15,21, "#8B4513"), (16,21, "#8B4513"), (5,22, "#8B4513"), (6,22, "#8B4513"), (7,22, "#8B4513"), (8,22, "#8B4513"), (9,22, "#8B4513"), (10,22, "#8B4513"), (11,22, "#8B4513"), (12,22, "#8B4513"), (14,22, "#8B4513"), (15,22, "#8B4513"), (16,22, "#8B4513"), (18,22, "#8B4513"), (3,23, "#8B4513"), (5,23, "#8B4513"), (6,23, "#8B4513"), (8,23, "#8B4513"), (9,23, "#8B4513"), (12,23, "#8B4513"), (14,23, "#8B4513"), (16,23, "#8B4513"), (18,23, "#8B4513"), (20,23, "#8B4513")] 
+charShellExplosion13 = [(11,21, "#8B4513"), (12,21, "#8B4513"), (5,22, "#8B4513"), (6,22, "#8B4513"), (7,22, "#8B4513"), (8,22, "#8B4513"), (9,22, "#8B4513"), (10,22, "#8B4513"), (11,22, "#8B4513"), (12,22, "#8B4513"), (14,22, "#8B4513"), (15,22, "#8B4513"), (16,22, "#8B4513"), (18,22, "#8B4513"), (3,23, "#8B4513"), (5,23, "#8B4513"), (6,23, "#8B4513"), (7,23, "#8B4513"), (8,23, "#8B4513"), (9,23, "#8B4513"), (11,23, "#8B4513"), (12,23, "#8B4513"), (13,23, "#8B4513"), (14,23, "#8B4513"), (15,23, "#8B4513"), (16,23, "#8B4513"), (17,23, "#8B4513"), (18,23, "#8B4513"), (20,23, "#8B4513")] 
+
+
+ShellExplosionList = [charShellExplosion1,charShellExplosion2,charShellExplosion3,charShellExplosion4,charShellExplosion5,charShellExplosion6,charShellExplosion7,charShellExplosion8,charShellExplosion9,charShellExplosion10,charShellExplosion11,charShellExplosion12,charShellExplosion13]
+
 #endregion
 
 
@@ -213,13 +232,14 @@ def rotate(points, angle_deg, pivot):
 
 #region Physics functions
 def resetball():
-    global ballx0, bally0, vx, vy, v
+    global ballx0, bally0, vx, vy, v, gamestate
     v = math.sqrt(r*g)
     ballx0 = gunx
     bally0 = guny
     vx = v*cosd(angle) # x component of initial velocity
     vy = v*sind(angle) # y component of initial velocity
     ball.resetposition(screenx(ballx0)-15+6, screeny(bally0)-10) # ball is a big 8 by 8 square with a dot in it!!!!
+    ball.loadchar(charBall)
     ball.undraw()
     intialvelocitytext.update(int(v))
     canvas1.itemconfigure(statusLED,text="")
@@ -274,16 +294,19 @@ def moveball():
          vxtext.update(0)
          vytext.update(0)
          bally=0
-         ball.resetposition(screenx(ballx)-15+6, screeny(bally)-10)
+         ball.resetposition(screenx(ballx)-15+6-15, screeny(bally)-10-38)
          gamestate = GameStates.IMPACT
          e = int(t - i0);
          if (abs(e) < 100):
            statustext.update("Target destroyed. "+str(s)+ " rounds of ammunition expended")
+           ball.undraw()
            timerMissleExplosion()
          elif (e < 0):
            statustext.update("Over target by " + str(abs(e))+ " metres")
+           timerShellExplosion()
          else:   
            statustext.update("Short of target by " + str(abs(e))+ " metres")
+           timerShellExplosion()
 #endregion
 
 MAXx = 1914
@@ -348,6 +371,7 @@ vy = v*sind(angle)
 xoffset = 20
 heighttype = "GROUND"
 MissleExplosionNumber = 0
+ShellExplosionNumber = 0
 #endregion
 
 
@@ -413,10 +437,19 @@ def timer1():
 
 def timerMissleExplosion():
     global MissleExplosionNumber
-    MissleExplosionNumber += 1
-    if MissleExplosionNumber < len(MissleExplosionList):
+    if gamestate == GameStates.IMPACT:
+      MissleExplosionNumber += 1
+      if MissleExplosionNumber < len(MissleExplosionList):
         target.loadchar(MissleExplosionList[MissleExplosionNumber])
         mainwin.after(200,timerMissleExplosion)
+
+def timerShellExplosion():
+    global ShellExplosionNumber
+    if gamestate == GameStates.IMPACT:
+      ShellExplosionNumber += 1
+      if ShellExplosionNumber < len(ShellExplosionList):
+        ball.loadchar(ShellExplosionList[ShellExplosionNumber])
+        mainwin.after(200,timerShellExplosion)
 
 #endregion
 
@@ -425,7 +458,7 @@ def timerMissleExplosion():
 
 #region buttons
 def onclickFire():
-    global s, z, ballx, bally, tm, gamestate, MissleExplosionNumber
+    global s, z, ballx, bally, tm, gamestate, MissleExplosionNumber, ShellExplosionNumber
     gamestate = GameStates.PROJECTILEFLYING
     statustext.update("Shell Fired. Waiting for impact")
     tm = 0
@@ -435,10 +468,13 @@ def onclickFire():
     timer1()
     s = s + 1
     target.loadchar(charBullseye3)
+    ball.loadchar(charBall)
     MissleExplosionNumber = 0
+    ShellExplosionNumber = 0
 
 def updateangle(mystep):
-    global angle
+    global angle, gamestate
+    gamestate = GameStates.USERINPUT
     angle = angle + mystep
     if angle > 89: angle = 89
     if angle < 5: angle = 5
