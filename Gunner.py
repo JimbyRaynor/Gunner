@@ -3,8 +3,13 @@
 # levels: Beginner explosion range 3000m
 #       : Standard explosion range 100m
 #       : Tutorials
+#       : Tutorial 0
+#        -> instructor shows to click on 30 degrees to hit target
+#        : Tut 1. Approx 30 degrees, click on +- 
+#       : hardest level -> must use trig to get one-shot
+# Name levels after mountains: Everest, K2, etc. And draw Mountains at correct height. Everest is hardest (one round of ammo, high angle)
 # draw Finite State Diagram for levels/tutorials/math explanations
-# other guns shot hole in walls, use mouse to determine coords of hole, then shot through hole to destroy all missiles
+# other guns shoot hole in walls, use mouse to determine coords of hole, then shot through hole to destroy all missiles
 # draw other targets: missles, tanks, HQ, planes, guns, etc., all have different points 
 # Multi-target bonus level. Just shoot and see if it hits. Time Limit. Show points for each target.
 # Draw pictures in small parts 32 by 32 pixels - use asesrpite
@@ -501,7 +506,7 @@ fireimage = PhotoImage(file="fire.png")
 
 retroInputx = 1420
 retroInputy = 500
-dy = 120
+dy = 120-120
 
 buttonheight = retroInputy+80+85+12+dy
 buttonwidth= 65
@@ -588,7 +593,7 @@ targettext=LEDlib.LEDscoreobj(canvas1,targetpanelx+35,targetpanely+6,t,colour="y
 
 # yloc shell height panel (y = ?)
 panelx = retroInputx+190+10-230
-panely = retroInputy-300+120+60
+panely = retroInputy-300+120+60-120
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=460,height=120+120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+10,width=420,height=100+120,bevelsize=4)
 canvas1.create_text(panelx+58, panely+24, text="SHELL CAM", fill ="white", font = ("ubuntu",8, "bold"))
@@ -604,7 +609,7 @@ Shellcam.load(0)
 
 # horizontal speed panel (vx = ?)
 panelx = retroInputx-40+10
-panely = retroInputy-300+60
+panely = retroInputy-300+60+490
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
 canvas1.create_text(panelx+115, panely+20, text="SHELL HORIZONTAL SPEED (M PER S)", fill ="black", font = ("ubuntu",8, "bold"))
@@ -613,7 +618,7 @@ vxtext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56,0,colour="light green",pix
 
 # vertical speed panel (vx = ?)
 panelx = retroInputx+190+10
-panely = retroInputy-300+60
+panely = retroInputy-300+60+490
 Panellib.drawpanel(canvas1, x=panelx,y=panely,width=230,height=120,bevelsize=4)
 Panellib.drawpanelinner(canvas1, x=panelx+20,y=panely+40,width=190,height=60,bevelsize=4)
 canvas1.create_text(panelx+115, panely+20, text="SHELL VERTICAL SPEED (M PER S)", fill ="black", font = ("ubuntu",8, "bold"))
