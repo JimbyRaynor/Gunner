@@ -1,18 +1,18 @@
 #region todo
-# shell explosion, add end-frames to missle explosion 
+# debug screen: show variable values
+# A rool, B roll, B roll could be to evaluate expressions like x -y + z, leading to BODMAS
+# make "level" screen, show instructions, use state machine
+# add end-frames to missle explosion and make bigger 48x48 
 # levels: Beginner explosion range 3000m
 #       : Standard explosion range 100m
 #       : Tutorials
-#       : Tutorial 0
-#        -> instructor shows to click on 30 degrees to hit target
-#        : Tut 1. Approx 30 degrees, click on +- 
 #       : hardest level -> must use trig to get one-shot
 # Name levels after mountains: Everest, K2, etc. And draw Mountains at correct height. Everest is hardest (one round of ammo, high angle)
 # draw Finite State Diagram for levels/tutorials/math explanations
 # other guns shoot hole in walls, use mouse to determine coords of hole, then shot through hole to destroy all missiles
 # draw other targets: missles, tanks, HQ, planes, guns, etc., all have different points 
 # Multi-target bonus level. Just shoot and see if it hits. Time Limit. Show points for each target.
-# Draw pictures in small parts 32 by 32 pixels - use asesrpite
+# Draw pictures in small parts 32 by 32 pixels - use Aseprite
 #    use contour tool to draw patches
 #    Then blur with the blur tool
 # 45 degree angle fixed
@@ -33,7 +33,6 @@
 # change play, ff butons to rotation buttons
 # 50 rounds of ammo. How many targets can you hit. Target moves after n seconds
 # make angle arc red when outside normal zone
-# level 0 tutorial
 # Lessons instead of levels? Lesson 1, Lesson 2, etc
 # Set t = 120 (say)
 # Now solve for hitting target at (x0,y0)
@@ -97,7 +96,7 @@ from tkinter import *
 from enum import Enum
 
 sys.path.insert(0, os.path.expanduser("~/Documents"))
-import LEDlib
+import LEDlib, LEDlib2
 import Panellib
 # for loading files (.png, .txt), set current directory = location of this python script (needed for Linux)
 current_script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -175,6 +174,10 @@ ShellExplosionList = [charShellExplosion1,charShellExplosion2,charShellExplosion
 #endregion
 
 
+
+
+
+#region STATES
 class GameStates(Enum):
     USERINPUT = 1
     PROJECTILEFLYING = 2
@@ -183,6 +186,10 @@ class GameStates(Enum):
     IMPACT = 5
 
 gamestate = GameStates.USERINPUT
+#endregion
+
+
+
 
 #region general functions
 
@@ -341,8 +348,56 @@ class Spriteobj:
 
 mainwin = Tk()
 mainwin.geometry(str(MAXx)+"x"+str(MAXy)) 
+mainwin.title("GUNNER")
 canvas1 = Canvas(mainwin,width=MAXx,height= MAXy,bg="black")
 canvas1.place(x=0,y=0)
+
+#region DEBUGWIN
+debugwin = Toplevel(mainwin)
+debugwin.title("Debug window")
+debugwin.geometry("850x650+4900+20")
+canvasdebug = Canvas(debugwin,width=1800,height=700,bg="black")
+canvasdebug.place(x=0,y=0)
+debugscrollbox = LEDlib2.scrollboxobj2(canvasdebug,x=10,y=50,width=800,height=500,maxlines=19,pixelsize = 2, charwidth = 15)
+debugscrollbox.scrollboxadd("Variables")
+#endregion
+
+#region LEVELSELECTOR
+level = 0
+levelwin = Toplevel(mainwin)
+levelwin.title("Level Selector")
+levelwin.geometry("850x650+4000+20")
+canvas2 = Canvas(levelwin,width=1800,height=700,bg="black")
+canvas2.place(x=0,y=0)
+
+def onclicklevel1():
+    global level
+    level = 1
+    levelscrollbox.scrollboxadd("Level 1 Selected: Choose 30 degrees of Gun Elevation")
+    levelscrollbox.scrollboxadd("Full onscreen arrows showing what buttons to press")
+    levelscrollbox.scrollboxadd(" ")
+    debugscrollbox.scrollboxadd("level = "+str(level))
+    debugscrollbox.scrollboxadd("gamestate = "+str(gamestate))
+    
+
+def onclicklevel2():
+    global level
+    level = 2
+    levelscrollbox.scrollboxadd("Level 2 Selected: Use single rotation buttons to")
+    levelscrollbox.scrollboxadd("adjust to correct elevation (approx 30 degrees)")
+    levelscrollbox.scrollboxadd("Full onscreen arrows showing what buttons to press")
+    levelscrollbox.scrollboxadd(" ")
+    debugscrollbox.scrollboxadd("level = "+str(level))
+
+btnLevel1 = Button(levelwin,text = "Level 1",command = onclicklevel1)
+btnLevel1.place(x=0,y=0)
+btnLevel2 = Button(levelwin,text = "Level 2",command = onclicklevel2)
+btnLevel2.place(x=300,y=0)
+
+levelscrollbox = LEDlib2.scrollboxobj2(canvas2,x=10,y=50,width=800,height=500,maxlines=19,pixelsize = 2, charwidth = 15)
+levelscrollbox.scrollboxadd("Level Selector")
+#endregion
+
 
 
 #region Global Variables
