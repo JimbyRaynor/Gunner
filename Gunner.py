@@ -1,5 +1,12 @@
 #region todo
-# debug screen: show variable values
+# Colourful animations
+# make LEDObjAni for animations with timer built in
+# don't use png (Aseprite) until GameMaker? No png libraries in LED?
+# larger targets for introduction level 0
+# Xmas library for Xmas themes: Decorate GUNNER logo
+#    -> Fire Xmas Presents at towns?
+#    -> Snow
+#   make explosion for each type of target
 # A rool, B roll, B roll could be to evaluate expressions like x -y + z, leading to BODMAS
 # make "level" screen, show instructions, use state machine
 # add end-frames to missle explosion and make bigger 48x48 
@@ -107,7 +114,7 @@ os.chdir(current_script_directory)
 
 
 #region sprites
-# only simple 8,16 bit graphics 
+# only simple 8,16,24,32 bit graphics 
 charAA = [(0,0, "#B5B3F5"), (1,0, "#B8860B"), (2,0, "#8B4513"), (3,0, "#8B4513"), (4,0, "#8B4513"), (5,0, "#8B4513"), (6,0, "#B8860B"), (7,0, "#B8860B"), (1,1, "#B8860B"), (2,1, "#B8860B"), (3,1, "#8B4513"), (4,1, "#8B4513"), (5,1, "#8B4513"), (6,1, "#B8860B"), (7,1, "#B8860B"), (1,2, "#FFFFE0"), (2,2, "#FFFFE0"), (3,2, "#FFFFE0"), (4,2, "#FFFFE0"), (5,2, "#FFFFE0"), (6,2, "#FFFFE0"), (7,2, "#FFFFE0"), (0,3, "#FFFF00"), (1,3, "#FFFFE0"), (4,3, "#FFFFE0"), (7,3, "#FFFFE0"), (1,4, "#FFFFE0"), (4,4, "#FFFFE0"), (7,4, "#FFFFE0"), (1,5, "#FFFFE0"), (2,5, "#FFFFE0"), (3,5, "#FFFFE0"), (4,5, "#FFFFE0"), (5,5, "#FFFFE0"), (6,5, "#FFFFE0"), (7,5, "#FFFFE0"), (1,6, "#B8860B"), (2,6, "#B5B3F5"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5"), (5,6, "#B5B3F5"), (6,6, "#FFFF00"), (7,6, "#FFFF00"), (0,7, "#8B4513"), (1,7, "#8B4513"), (2,7, "#8B4513"), (3,7, "#B8860B"), (4,7, "#B8860B"), (5,7, "#B8860B"), (6,7, "#8B4513"), (7,7, "#8B4513")]
 charAB = [(2,2, "#FFFF00"), (3,2, "#FFFF00"), (5,2, "#FFFF00"), (0,3, "#FFFF00"), (1,3, "#000000"), (2,3, "#FFFF00"), (3,3, "#000000"), (4,3, "#FFFF00"), (5,3, "#000000"), (6,3, "#FFFF00"), (7,3, "#FFFF00"), (2,4, "#FFFF00"), (3,4, "#FFFF00"), (4,4, "#FFFF00"), (5,4, "#FFFF00"), (6,4, "#FFFF00"), (3,6, "#B5B3F5"), (4,6, "#B5B3F5")]
 charGun = [(5,0, "#279627"), (6,0, "#8B4513"), (4,1, "#279627"), (5,1, "#8B4513"), (3,2, "#8B4513"), (4,2, "#8B4513"), (2,3, "#8B4513"), (3,3, "#279627"), (1,4, "#279627"), (2,4, "#8B4513"), (3,4, "#AAAAAA"), (4,4, "#8B4513"), (5,4, "#AAAAAA"), (6,4, "#8B4513"), (0,5, "#AAAAAA"), (1,5, "#8B4513"), (2,5, "#AAAAAA"), (3,5, "#279627"), (4,5, "#AAAAAA"), (5,5, "#8B4513"), (6,5, "#279627"), (7,5, "#8B4513"), (0,6, "#4C3A23"), (1,6, "#000000"), (2,6, "#000000"), (3,6, "#000000"), (4,6, "#000000"), (5,6, "#000000"), (6,6, "#000000"), (7,6, "#4C3A23"), (1,7, "#4C3A23"), (2,7, "#4C3A23"), (3,7, "#4C3A23"), (4,7, "#4C3A23"), (5,7, "#4C3A23"), (6,7, "#4C3A23")]
@@ -170,6 +177,15 @@ charShellExplosion13 = [(11,21, "#8B4513"), (12,21, "#8B4513"), (5,22, "#8B4513"
 
 
 ShellExplosionList = [charShellExplosion1,charShellExplosion2,charShellExplosion3,charShellExplosion4,charShellExplosion5,charShellExplosion6,charShellExplosion7,charShellExplosion8,charShellExplosion9,charShellExplosion10,charShellExplosion11,charShellExplosion12,charShellExplosion13]
+
+
+charCandle1 = [(7,5, "#FFFF00"), (8,5, "#FFFF00"), (7,6, "#FF5900"), (8,6, "#FFFF00"), (8,7, "#FFFF00"), (4,8, "#DDDDDD"), (5,8, "#E6E6FA"), (6,8, "#FFD1F0"), (7,8, "#FFD1F0"), (8,8, "#E0FFFF"), (9,8, "#FFD1F0"), (10,8, "#E0FFFF"), (11,8, "#DDDDDD"), (4,9, "#DDDDDD"), (5,9, "#E6E6FA"), (6,9, "#E6E6FA"), (7,9, "#E6E6FA"), (8,9, "#FFFFFF"), (9,9, "#E6E6FA"), (10,9, "#E0FFFF"), (11,9, "#DDDDDD"), (4,10, "#DDDDDD"), (5,10, "#E6E6FA"), (6,10, "#E0FFFF"), (7,10, "#E6E6FA"), (8,10, "#FFFFFF"), (9,10, "#E6E6FA"), (10,10, "#E0FFFF"), (11,10, "#DDDDDD"), (4,11, "#DDDDDD"), (5,11, "#E6E6FA"), (6,11, "#E0FFFF"), (7,11, "#E6E6FA"), (8,11, "#FFFFFF"), (9,11, "#E6E6FA"), (10,11, "#E0FFFF"), (11,11, "#DDDDDD"), (4,12, "#DDDDDD"), (5,12, "#FFD1F0"), (6,12, "#E0FFFF"), (7,12, "#E6E6FA"), (8,12, "#FFFFFF"), (9,12, "#E6E6FA"), (10,12, "#E0FFFF"), (11,12, "#DDDDDD"), (4,13, "#DDDDDD"), (5,13, "#E6E6FA"), (6,13, "#E0FFFF"), (7,13, "#E6E6FA"), (8,13, "#FFFFFF"), (9,13, "#DDDDDD"), (10,13, "#E0FFFF"), (11,13, "#DDDDDD"), (4,14, "#DDDDDD"), (5,14, "#E6E6FA"), (6,14, "#E0FFFF"), (7,14, "#E6E6FA"), (8,14, "#FFFFFF"), (9,14, "#E6E6FA"), (10,14, "#E0FFFF"), (11,14, "#DDDDDD"), (4,15, "#DDDDDD"), (5,15, "#E6E6FA"), (6,15, "#E0FFFF"), (7,15, "#E6E6FA"), (8,15, "#FFFFFF"), (9,15, "#E6E6FA"), (10,15, "#E0FFFF"), (11,15, "#DDDDDD")] 
+charCandle2 = [(7,4, "#FF0000"), (8,4, "#FFFF00"), (9,4, "#FFFF00"), (7,5, "#FFFF00"), (8,5, "#FFFF00"), (7,6, "#FF5900"), (8,6, "#FFFF00"), (8,7, "#FFFF00"), (4,8, "#DDDDDD"), (5,8, "#E6E6FA"), (6,8, "#FFD1F0"), (7,8, "#FFD1F0"), (8,8, "#E0FFFF"), (9,8, "#FFD1F0"), (10,8, "#E0FFFF"), (11,8, "#DDDDDD"), (4,9, "#DDDDDD"), (5,9, "#E6E6FA"), (6,9, "#E6E6FA"), (7,9, "#E6E6FA"), (8,9, "#FFFFFF"), (9,9, "#E6E6FA"), (10,9, "#E0FFFF"), (11,9, "#DDDDDD"), (4,10, "#DDDDDD"), (5,10, "#E6E6FA"), (6,10, "#E0FFFF"), (7,10, "#E6E6FA"), (8,10, "#FFFFFF"), (9,10, "#E6E6FA"), (10,10, "#E0FFFF"), (11,10, "#DDDDDD"), (4,11, "#DDDDDD"), (5,11, "#E6E6FA"), (6,11, "#E0FFFF"), (7,11, "#E6E6FA"), (8,11, "#FFFFFF"), (9,11, "#E6E6FA"), (10,11, "#E0FFFF"), (11,11, "#DDDDDD"), (4,12, "#DDDDDD"), (5,12, "#FFD1F0"), (6,12, "#E0FFFF"), (7,12, "#E6E6FA"), (8,12, "#FFFFFF"), (9,12, "#E6E6FA"), (10,12, "#E0FFFF"), (11,12, "#DDDDDD"), (4,13, "#DDDDDD"), (5,13, "#E6E6FA"), (6,13, "#E0FFFF"), (7,13, "#E6E6FA"), (8,13, "#FFFFFF"), (9,13, "#DDDDDD"), (10,13, "#E0FFFF"), (11,13, "#DDDDDD"), (4,14, "#DDDDDD"), (5,14, "#E6E6FA"), (6,14, "#E0FFFF"), (7,14, "#E6E6FA"), (8,14, "#FFFFFF"), (9,14, "#E6E6FA"), (10,14, "#E0FFFF"), (11,14, "#DDDDDD"), (4,15, "#DDDDDD"), (5,15, "#E6E6FA"), (6,15, "#E0FFFF"), (7,15, "#E6E6FA"), (8,15, "#FFFFFF"), (9,15, "#E6E6FA"), (10,15, "#E0FFFF"), (11,15, "#DDDDDD")] 
+charCandle3 = [(9,3, "#FFFF00"), (10,3, "#FFFF00"), (7,4, "#FF0000"), (8,4, "#8B0000"), (9,4, "#FF0000"), (10,4, "#FFFF00"), (7,5, "#FFFF00"), (8,5, "#FFFF00"), (7,6, "#FF5900"), (8,6, "#FFFF00"), (8,7, "#FFFF00"), (4,8, "#DDDDDD"), (5,8, "#E6E6FA"), (6,8, "#FFD1F0"), (7,8, "#FFD1F0"), (8,8, "#E0FFFF"), (9,8, "#FFD1F0"), (10,8, "#E0FFFF"), (11,8, "#DDDDDD"), (4,9, "#DDDDDD"), (5,9, "#E6E6FA"), (6,9, "#E6E6FA"), (7,9, "#E6E6FA"), (8,9, "#FFFFFF"), (9,9, "#E6E6FA"), (10,9, "#E0FFFF"), (11,9, "#DDDDDD"), (4,10, "#DDDDDD"), (5,10, "#E6E6FA"), (6,10, "#E0FFFF"), (7,10, "#E6E6FA"), (8,10, "#FFFFFF"), (9,10, "#E6E6FA"), (10,10, "#E0FFFF"), (11,10, "#DDDDDD"), (4,11, "#DDDDDD"), (5,11, "#E6E6FA"), (6,11, "#E0FFFF"), (7,11, "#E6E6FA"), (8,11, "#FFFFFF"), (9,11, "#E6E6FA"), (10,11, "#E0FFFF"), (11,11, "#DDDDDD"), (4,12, "#DDDDDD"), (5,12, "#FFD1F0"), (6,12, "#E0FFFF"), (7,12, "#E6E6FA"), (8,12, "#FFFFFF"), (9,12, "#E6E6FA"), (10,12, "#E0FFFF"), (11,12, "#DDDDDD"), (4,13, "#DDDDDD"), (5,13, "#E6E6FA"), (6,13, "#E0FFFF"), (7,13, "#E6E6FA"), (8,13, "#FFFFFF"), (9,13, "#DDDDDD"), (10,13, "#E0FFFF"), (11,13, "#DDDDDD"), (4,14, "#DDDDDD"), (5,14, "#E6E6FA"), (6,14, "#E0FFFF"), (7,14, "#E6E6FA"), (8,14, "#FFFFFF"), (9,14, "#E6E6FA"), (10,14, "#E0FFFF"), (11,14, "#DDDDDD"), (4,15, "#DDDDDD"), (5,15, "#E6E6FA"), (6,15, "#E0FFFF"), (7,15, "#E6E6FA"), (8,15, "#FFFFFF"), (9,15, "#E6E6FA"), (10,15, "#E0FFFF"), (11,15, "#DDDDDD")] 
+charCandle4 = [(9,2, "#FF0000"), (10,2, "#FFFF00"), (9,3, "#FFFF00"), (10,3, "#FFFF00"), (7,4, "#FF0000"), (10,4, "#FFFF00"), (6,5, "#FFFF00"), (7,5, "#FFFF00"), (8,5, "#FFFF00"), (7,6, "#FF5900"), (8,6, "#FFFF00"), (7,7, "#FFFF00"), (8,7, "#FFFF00"), (4,8, "#DDDDDD"), (5,8, "#E6E6FA"), (6,8, "#FFD1F0"), (7,8, "#FFD1F0"), (8,8, "#E0FFFF"), (9,8, "#FFD1F0"), (10,8, "#E0FFFF"), (11,8, "#DDDDDD"), (4,9, "#DDDDDD"), (5,9, "#E6E6FA"), (6,9, "#E6E6FA"), (7,9, "#E6E6FA"), (8,9, "#FFFFFF"), (9,9, "#E6E6FA"), (10,9, "#E0FFFF"), (11,9, "#DDDDDD"), (4,10, "#DDDDDD"), (5,10, "#E6E6FA"), (6,10, "#E0FFFF"), (7,10, "#E6E6FA"), (8,10, "#FFFFFF"), (9,10, "#E6E6FA"), (10,10, "#E0FFFF"), (11,10, "#DDDDDD"), (4,11, "#DDDDDD"), (5,11, "#E6E6FA"), (6,11, "#E0FFFF"), (7,11, "#E6E6FA"), (8,11, "#FFFFFF"), (9,11, "#E6E6FA"), (10,11, "#E0FFFF"), (11,11, "#DDDDDD"), (4,12, "#DDDDDD"), (5,12, "#FFD1F0"), (6,12, "#E0FFFF"), (7,12, "#E6E6FA"), (8,12, "#FFFFFF"), (9,12, "#E6E6FA"), (10,12, "#E0FFFF"), (11,12, "#DDDDDD"), (4,13, "#DDDDDD"), (5,13, "#E6E6FA"), (6,13, "#E0FFFF"), (7,13, "#E6E6FA"), (8,13, "#FFFFFF"), (9,13, "#DDDDDD"), (10,13, "#E0FFFF"), (11,13, "#DDDDDD"), (4,14, "#DDDDDD"), (5,14, "#E6E6FA"), (6,14, "#E0FFFF"), (7,14, "#E6E6FA"), (8,14, "#FFFFFF"), (9,14, "#E6E6FA"), (10,14, "#E0FFFF"), (11,14, "#DDDDDD"), (4,15, "#DDDDDD"), (5,15, "#E6E6FA"), (6,15, "#E0FFFF"), (7,15, "#E6E6FA"), (8,15, "#FFFFFF"), (9,15, "#E6E6FA"), (10,15, "#E0FFFF"), (11,15, "#DDDDDD")] 
+charCandle5 = [(11,2, "#FFFF00"), (6,5, "#FFFF00"), (7,5, "#FFFF00"), (6,6, "#FFFF00"), (7,6, "#FF5900"), (7,7, "#FFFF00"), (8,7, "#FFFF00"), (4,8, "#DDDDDD"), (5,8, "#E6E6FA"), (6,8, "#FFD1F0"), (7,8, "#FFD1F0"), (8,8, "#E0FFFF"), (9,8, "#FFD1F0"), (10,8, "#E0FFFF"), (11,8, "#DDDDDD"), (4,9, "#DDDDDD"), (5,9, "#E6E6FA"), (6,9, "#E6E6FA"), (7,9, "#E6E6FA"), (8,9, "#FFFFFF"), (9,9, "#E6E6FA"), (10,9, "#E0FFFF"), (11,9, "#DDDDDD"), (4,10, "#DDDDDD"), (5,10, "#E6E6FA"), (6,10, "#E0FFFF"), (7,10, "#E6E6FA"), (8,10, "#FFFFFF"), (9,10, "#E6E6FA"), (10,10, "#E0FFFF"), (11,10, "#DDDDDD"), (4,11, "#DDDDDD"), (5,11, "#E6E6FA"), (6,11, "#E0FFFF"), (7,11, "#E6E6FA"), (8,11, "#FFFFFF"), (9,11, "#E6E6FA"), (10,11, "#E0FFFF"), (11,11, "#DDDDDD"), (4,12, "#DDDDDD"), (5,12, "#FFD1F0"), (6,12, "#E0FFFF"), (7,12, "#E6E6FA"), (8,12, "#FFFFFF"), (9,12, "#E6E6FA"), (10,12, "#E0FFFF"), (11,12, "#DDDDDD"), (4,13, "#DDDDDD"), (5,13, "#E6E6FA"), (6,13, "#E0FFFF"), (7,13, "#E6E6FA"), (8,13, "#FFFFFF"), (9,13, "#DDDDDD"), (10,13, "#E0FFFF"), (11,13, "#DDDDDD"), (4,14, "#DDDDDD"), (5,14, "#E6E6FA"), (6,14, "#E0FFFF"), (7,14, "#E6E6FA"), (8,14, "#FFFFFF"), (9,14, "#E6E6FA"), (10,14, "#E0FFFF"), (11,14, "#DDDDDD"), (4,15, "#DDDDDD"), (5,15, "#E6E6FA"), (6,15, "#E0FFFF"), (7,15, "#E6E6FA"), (8,15, "#FFFFFF"), (9,15, "#E6E6FA"), (10,15, "#E0FFFF"), (11,15, "#DDDDDD")] 
+
+CandleList = [charCandle1, charCandle2, charCandle3, charCandle4, charCandle5]
 
 #endregion
 
@@ -360,6 +376,13 @@ canvasdebug = Canvas(debugwin,width=1800,height=700,bg="black")
 canvasdebug.place(x=0,y=0)
 debugscrollbox = LEDlib2.scrollboxobj2(canvasdebug,x=10,y=50,width=800,height=500,maxlines=19,pixelsize = 2, charwidth = 15)
 debugscrollbox.scrollboxadd("Variables")
+
+def onclickUpdateDebugwin():
+    debugscrollbox.scrollboxadd("level = "+str(level))
+    debugscrollbox.scrollboxadd("gamestate = "+str(gamestate))
+
+btnUpdateDebugwin = Button(debugwin,text = "Update",command = onclickUpdateDebugwin)
+btnUpdateDebugwin.place(x=0,y=0)
 #endregion
 
 #region LEVELSELECTOR
@@ -376,10 +399,7 @@ def onclicklevel1():
     levelscrollbox.scrollboxadd("Level 1 Selected: Choose 30 degrees of Gun Elevation")
     levelscrollbox.scrollboxadd("Full onscreen arrows showing what buttons to press")
     levelscrollbox.scrollboxadd(" ")
-    debugscrollbox.scrollboxadd("level = "+str(level))
-    debugscrollbox.scrollboxadd("gamestate = "+str(gamestate))
     
-
 def onclicklevel2():
     global level
     level = 2
@@ -387,7 +407,6 @@ def onclicklevel2():
     levelscrollbox.scrollboxadd("adjust to correct elevation (approx 30 degrees)")
     levelscrollbox.scrollboxadd("Full onscreen arrows showing what buttons to press")
     levelscrollbox.scrollboxadd(" ")
-    debugscrollbox.scrollboxadd("level = "+str(level))
 
 btnLevel1 = Button(levelwin,text = "Level 1",command = onclicklevel1)
 btnLevel1.place(x=0,y=0)
@@ -432,6 +451,7 @@ xoffset = 20
 heighttype = "GROUND"
 MissleExplosionNumber = 0
 ShellExplosionNumber = 0
+CandleNumber = 0
 #endregion
 
 
@@ -470,12 +490,13 @@ instructionbox.scrollboxadd("A hit within 100 metres of the target will destroy 
 #endregion
 
 
-#region Objects
+#region OBJECT INSTANCES
 
 myship = LEDlib.LEDobj(canvas1,10,10,dx = 0,dy = 0,CharPoints=charAA, pixelsize = 2)
 myship2 = LEDlib.LEDobj(canvas1,40,10,dx = 0,dy = 0,CharPoints=charAB, pixelsize = 2)
 target = LEDlib.LEDobj(canvas1,100,screeny(guny)-24,dx = 0,dy = 0,CharPoints=charBullseye3, pixelsize = 1)
 #MissleExplosion = LEDlib.LEDobj(canvas1,100,screeny(guny)-24,dx = 0,dy = 0,CharPoints=MissleExplosionList[3], pixelsize = 1)
+Candle1 = LEDlib.LEDobj(canvas1,427,48,dx = 0,dy = 0,CharPoints=CandleList[0], pixelsize = 2)
 
 gun = LEDlib.LEDobj(canvas1,screenx(gunx)-15+8,screeny(guny)-10,dx = 0,dy = 0,CharPoints=GunList[6], pixelsize = 2)
 ball = LEDlib.LEDobj(canvas1,screenx(ballx0)-15+8,screeny(bally0)-10,dx = 0,dy = 0,CharPoints=charBall, pixelsize = 2)
@@ -511,9 +532,18 @@ def timerShellExplosion():
         ball.loadchar(ShellExplosionList[ShellExplosionNumber])
         mainwin.after(200,timerShellExplosion)
 
+def timerCandle():
+    global CandleNumber
+    if CandleNumber < len(CandleList):
+        Candle1.loadchar(CandleList[CandleNumber])  
+        CandleNumber += 1
+    else:
+        CandleNumber = 0
+    mainwin.after(300,timerCandle)
+
 #endregion
 
-
+timerCandle()
 
 
 #region buttons
@@ -535,7 +565,7 @@ def onclickFire():
 def updateangle(mystep):
     global angle, gamestate
     gamestate = GameStates.USERINPUT
-    angle = angle + mystep
+    angle = round(angle + mystep,1)   # use round, o/w 21.8 is missing when step = 0.1 !!!
     if angle > 89: angle = 89
     if angle < 5: angle = 5
     retroangletext.update(angle)
