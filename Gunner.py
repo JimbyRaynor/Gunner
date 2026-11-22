@@ -1,6 +1,5 @@
 #region todo
 # Colourful animations
-# make LEDObjAni for animations with timer built in
 # don't use png (Aseprite) until GameMaker? No png libraries in LED?
 # larger targets for introduction level 0
 # Xmas library for Xmas themes: Decorate GUNNER logo
@@ -451,7 +450,6 @@ xoffset = 20
 heighttype = "GROUND"
 MissleExplosionNumber = 0
 ShellExplosionNumber = 0
-CandleNumber = 0
 #endregion
 
 
@@ -496,7 +494,7 @@ myship = LEDlib.LEDobj(canvas1,10,10,dx = 0,dy = 0,CharPoints=charAA, pixelsize 
 myship2 = LEDlib.LEDobj(canvas1,40,10,dx = 0,dy = 0,CharPoints=charAB, pixelsize = 2)
 target = LEDlib.LEDobj(canvas1,100,screeny(guny)-24,dx = 0,dy = 0,CharPoints=charBullseye3, pixelsize = 1)
 #MissleExplosion = LEDlib.LEDobj(canvas1,100,screeny(guny)-24,dx = 0,dy = 0,CharPoints=MissleExplosionList[3], pixelsize = 1)
-Candle1 = LEDlib.LEDobj(canvas1,427,48,dx = 0,dy = 0,CharPoints=CandleList[0], pixelsize = 2)
+Candle1 = LEDlib2.LEDobj2(canvas1,427,48,CharPointsList=CandleList, pixelsize = 2)
 
 gun = LEDlib.LEDobj(canvas1,screenx(gunx)-15+8,screeny(guny)-10,dx = 0,dy = 0,CharPoints=GunList[6], pixelsize = 2)
 ball = LEDlib.LEDobj(canvas1,screenx(ballx0)-15+8,screeny(bally0)-10,dx = 0,dy = 0,CharPoints=charBall, pixelsize = 2)
@@ -533,12 +531,7 @@ def timerShellExplosion():
         mainwin.after(200,timerShellExplosion)
 
 def timerCandle():
-    global CandleNumber
-    if CandleNumber < len(CandleList):
-        Candle1.loadchar(CandleList[CandleNumber])  
-        CandleNumber += 1
-    else:
-        CandleNumber = 0
+    Candle1.Animate()
     mainwin.after(300,timerCandle)
 
 #endregion
