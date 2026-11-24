@@ -1,5 +1,6 @@
 #region todo
 # Colourful animations
+# Add animated instructions
 # don't use png (Aseprite) until GameMaker? No png libraries in LED?
 # larger targets for introduction level 0
 # Xmas library for Xmas themes: Decorate GUNNER logo
@@ -9,13 +10,14 @@
 # A rool, B roll, B roll could be to evaluate expressions like x -y + z, leading to BODMAS
 # make "level" screen, show instructions, use state machine
 # add end-frames to missle explosion and make bigger 48x48 
-# levels: Beginner explosion range 3000m
-#       : Standard explosion range 100m
+# levels: Beginner explosion range 3000m soft target like fuel tanks, aircraft, etc
+#       : Standard explosion range 100m normal target
 #       : Tutorials
 #       : hardest level -> must use trig to get one-shot
+#       : Need one shot in middle level to get to next interesting level
 # Name levels after mountains: Everest, K2, etc. And draw Mountains at correct height. Everest is hardest (one round of ammo, high angle)
 # draw Finite State Diagram for levels/tutorials/math explanations
-# other guns shoot hole in walls, use mouse to determine coords of hole, then shot through hole to destroy all missiles
+# other guns shoot hole in walls, use mouse to determine coords of hole, then shoot through hole to destroy all missiles
 # draw other targets: missles, tanks, HQ, planes, guns, etc., all have different points 
 # Multi-target bonus level. Just shoot and see if it hits. Time Limit. Show points for each target.
 # Draw pictures in small parts 32 by 32 pixels - use Aseprite
@@ -315,7 +317,7 @@ def moveball():
     else:
          ytext.update(0) 
          b = angle
-         b2 = 2 * b / 57.3; # convert b to radians
+         b2 = 2 * b * math.pi/180; # convert b to radians and double
          i0 = r * math.sin(b2)
          xtext.update(int(abs(i0))) # true distance covered by shell
          vxtext.update(0)
@@ -379,6 +381,14 @@ debugscrollbox.scrollboxadd("Variables")
 def onclickUpdateDebugwin():
     debugscrollbox.scrollboxadd("level = "+str(level))
     debugscrollbox.scrollboxadd("gamestate = "+str(gamestate))
+    debugscrollbox.scrollboxadd("r (max range) = "+str(r))
+    debugscrollbox.scrollboxadd("t (target distance) = "+str(t))
+    debugscrollbox.scrollboxadd("angle = "+str(angle))
+    debugscrollbox.scrollboxadd("v = "+str(v))
+    debugscrollbox.scrollboxadd("vx = "+str(vx))
+    debugscrollbox.scrollboxadd("vy = "+str(vy))
+    debugscrollbox.scrollboxadd("canvas1 elements: "+str(len(canvas1.find_all())))
+    debugscrollbox.scrollboxadd(" ")
 
 btnUpdateDebugwin = Button(debugwin,text = "Update",command = onclickUpdateDebugwin)
 btnUpdateDebugwin.place(x=0,y=0)
@@ -393,8 +403,22 @@ canvas2 = Canvas(levelwin,width=1800,height=700,bg="black")
 canvas2.place(x=0,y=0)
 
 def onclicklevel1():
-    global level
+    global level,r,t,v,vx,vy,tm, ballx, bally
     level = 1
+    tm = 0
+    r = 30000
+    # USER needs to change angle = 30
+    t = int(r*math.sin(2*30*math.pi/180))
+    v = math.sqrt(r*g)
+    vx = v*cosd(angle)
+    vy = v*sind(angle)
+    ballx = ballx0
+    bally = bally0
+    xtext.update(int(ballx))
+    intialvelocitytext.update(int(v))
+    rangetext.update(int(r))
+    targettext.update(t)
+    target.resetposition(screenx(t)-12,screeny(guny)-24)
     levelscrollbox.scrollboxadd("Level 1 Selected: Choose 30 degrees of Gun Elevation")
     levelscrollbox.scrollboxadd("Full onscreen arrows showing what buttons to press")
     levelscrollbox.scrollboxadd(" ")
@@ -646,7 +670,7 @@ intialvelocitytext=LEDlib.LEDscoreobj(canvas1,panelx+35,panely+56-20,int(math.sq
 rangepanelx = retroInputx+200
 rangepanely = retroInputy-300-120*2+60
 canvas1.create_text(rangepanelx+115, rangepanely+100-20, text="MAX RANGE (METRES)", fill ="white", font = ("ubuntu",8, "bold"))
-rangetext=LEDlib.LEDtextobj(canvas1,rangepanelx+35,rangepanely+56-20,text=str(r),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
+rangetext=LEDlib.LEDscoreobj(canvas1,rangepanelx+35,rangepanely+56-20,int(r),colour="light green",pixelsize = 4, charwidth=8*4 , solid = False, square=False)
 
 
 # xloc panel (x = ?)
